@@ -1,0 +1,16 @@
+# Thư mục và file không cần đẩy lên Git
+Library/
+Logs/
+Temp/
+obj/
+UserSettings/
+.vs/
+*.csproj
+*.sln
+*.user
+Build/
+Builds/
+*.apk
+*.unitypackage
+.DS_Store
+Thumbs.db
