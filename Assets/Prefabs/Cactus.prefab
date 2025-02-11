@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 9037658534867385817}
   - component: {fileID: 3867788473403560884}
   - component: {fileID: 6617280533973586371}
+  - component: {fileID: -8167352421705181914}
   m_Layer: 0
   m_Name: Cactus
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -134,3 +135,15 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.34713805, y: 0.361689}
   m_EdgeRadius: 0
+--- !u!114 &-8167352421705181914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6382772333345189552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0f0ec99ccd188541a671e90a802b70c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

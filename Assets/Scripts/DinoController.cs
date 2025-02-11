@@ -5,7 +5,7 @@ using UnityEngine;
 public class DinoController : MonoBehaviour
 {
     private Rigidbody2D rb;
-    public float jumpForce = 10f;
+    public float jumpForce = 12.5f;
     private bool isGrounded = true;
     private bool isDashing = false;
     public Animator anim;
@@ -18,6 +18,7 @@ public class DinoController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>(); // Lấy Animator từ nhân vật
+        rb.gravityScale = 3.0f;
     }
 
     void Update()
@@ -74,6 +75,11 @@ public class DinoController : MonoBehaviour
         {
             isGrounded = true;
             anim.SetBool("isJumping", false); // Khi chạm đất, quay lại animation Run
+        }
+
+        if (collision.gameObject.CompareTag("Obstacle")) // Nếu va chạm với chướng ngại vật
+        {
+            FindFirstObjectByType<GameManager>().EndGame(); // Gọi hàm EndGame() trong GameManager
         }
     }
 }
