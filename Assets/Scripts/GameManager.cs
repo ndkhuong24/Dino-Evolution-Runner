@@ -57,6 +57,7 @@ public class GameManager : MonoBehaviour
 
         MoveGround();
         MoveObstacles();
+
         speedScroller += Time.deltaTime * speedIncreaseRate;
     }
 
@@ -115,7 +116,5 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.Save();
             bestTimeText.text = bestTime.ToString("D5");
         }
-
-        Debug.Log("Game Over! Nhấn SPACE để chơi lại.");
     }
 }
