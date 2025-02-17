@@ -14,8 +14,6 @@ public class ObstacleMover : MonoBehaviour
         if (gameManager != null)
         {
             transform.position += Vector3.left * gameManager.speedScroller * Time.deltaTime;
-
-            //Debug.Log("Speed: " + gameManager.speedScroller);
         }
 
         // Xóa chướng ngại vật khi ra khỏi màn hình
