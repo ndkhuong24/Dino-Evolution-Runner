@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 762494160310134926}
   - component: {fileID: 1209071368780935538}
   - component: {fileID: 2959527141599710197}
+  - component: {fileID: -8202815141904275893}
   m_Layer: 0
   m_Name: PortalSkill
   m_TagString: Untagged
@@ -134,3 +135,16 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.15625, y: 1.09375}
   m_EdgeRadius: 0
+--- !u!114 &-8202815141904275893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717251771798682735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c1913737342feb49b8096f40bab9df9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5

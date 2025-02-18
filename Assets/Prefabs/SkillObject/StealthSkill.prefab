@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2429252231811714087}
   - component: {fileID: 469910496042015356}
   - component: {fileID: 5975102828051709267}
+  - component: {fileID: -8092845476265984295}
   m_Layer: 0
   m_Name: StealthSkill
   m_TagString: Untagged
@@ -134,3 +135,16 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.8125, y: 0.8125}
   m_EdgeRadius: 0
+--- !u!114 &-8092845476265984295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2523134561153712916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c1913737342feb49b8096f40bab9df9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
