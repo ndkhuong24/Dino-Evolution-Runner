@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 469910496042015356}
   - component: {fileID: 5975102828051709267}
   - component: {fileID: -8092845476265984295}
+  - component: {fileID: 8717062831647326025}
   m_Layer: 0
   m_Name: StealthSkill
   m_TagString: Untagged
@@ -148,3 +149,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+--- !u!114 &8717062831647326025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2523134561153712916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e325a107dda27df43914a0b9a9da3feb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillData:
+    skillName: 
+    icon: {fileID: 0}
+    skillPrefab: {fileID: 0}

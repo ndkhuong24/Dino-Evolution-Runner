@@ -1,26 +1,39 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SkillIcon : MonoBehaviour
 {
     public Skill skillData;
 
+    public void SetSkillData(Skill skill)
+    {
+        skillData = skill;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            Debug.Log("Player chạm vào skill: " + skillData.skillName);
-            ActivateSkill();
+            if (skillData != null)
+            {
+                Debug.Log("Player chạm vào skill: " + skillData.skillName);
+                ActivateSkill();
+            }
+            else
+            {
+                Debug.LogError("SkillData bị thiếu trên skill object!");
+            }
         }
     }
 
     private void ActivateSkill()
     {
-        Debug.Log("Kích hoạt skill: " + skillData.skillName);
-
-        if (skillData.skillPrefab)
+        if (skillData != null)
         {
-            Instantiate(skillData.skillPrefab, transform.position, Quaternion.identity);
+            Debug.Log("Kích hoạt skill: " + skillData.skillName);
+            if (skillData.skillPrefab)
+            {
+                Instantiate(skillData.skillPrefab, transform.position, Quaternion.identity);
+            }
         }
     }
 }

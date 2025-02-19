@@ -2,17 +2,22 @@
 
 public class SkillMovement : MonoBehaviour
 {
-    public float speed = 5f; // Tốc độ di chuyển của skill
+    public float speed = 4f; // Tốc độ di chuyển của skill
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
 
     }
 
-    // Update is called once per frame
     void Update()
     {
-        transform.position += Vector3.left * speed * Time.deltaTime; // Di chuyển skill sang trái
+        transform.position += Vector3.left * speed * Time.deltaTime;
+
+        // Nếu Skill đi quá giới hạn bên trái, tự hủy
+        if (transform.position.x < -10f) // Giả sử -10f là giới hạn bên trái
+        {
+            Destroy(gameObject);
+        }
     }
+
 }
