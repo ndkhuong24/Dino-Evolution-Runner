@@ -5,22 +5,29 @@ public class ObstacleSpawner : MonoBehaviour
     public GameObject[] obstacles;
     public Transform spawnPoint;
 
-    public float minSpawnTime = 1.0f;
-    public float maxSpawnTime = 2.2f;
+    [Header("Spawn Timing")]
+    public float minSpawnTime = 1.5f;
+    public float maxSpawnTime = 3.0f;
+    public float spawnAcceleration = 0.99f;
+    private float minSpawnLimit;
+    private float maxSpawnLimit;
 
-    public float spawnAcceleration = 0.93f;  // Tăng tốc spawn nhanh hơn theo thời gian
-    public float spawnVariance = 1.2f;       // Ngẫu nhiên hóa thời gian spawn
-    public float doubleSpawnChance = 0.4f;   // 40% cơ hội spawn 2 chướng ngại vật cùng lúc
-    public float tripleSpawnChance = 0.15f;  // 15% cơ hội spawn 3 chướng ngại vật cùng lúc
+    [Header("Randomization")]
+    public float doubleSpawnChance = 0.3f;
 
     private float nextSpawnTime;
     private float currentMinSpawnTime;
     private float currentMaxSpawnTime;
+    //private float lastSpawnX = -10f;
 
     void Start()
     {
         currentMinSpawnTime = minSpawnTime;
         currentMaxSpawnTime = maxSpawnTime;
+
+        minSpawnLimit = minSpawnTime * 0.7f;
+        maxSpawnLimit = maxSpawnTime * 0.7f;
+
         SetNextSpawnTime();
     }
 
@@ -38,16 +45,17 @@ public class ObstacleSpawner : MonoBehaviour
     {
         int spawnCount = 1;
 
-        // Xác suất spawn 2 hoặc 3 chướng ngại vật cùng lúc
-        if (Random.value < tripleSpawnChance)
-        {
-            spawnCount = 3; // 15% cơ hội spawn 3 chướng ngại vật
-        }
-        else if (Random.value < doubleSpawnChance)
-        {
-            spawnCount = 2; // 40% cơ hội spawn 2 chướng ngại vật
-        }
+        if (Random.value < doubleSpawnChance) spawnCount = 2; // Chỉ còn spawn 1 hoặc 2 chướng ngại vật
 
+        //for (int i = 0; i < spawnCount; i++)
+        //{
+        //    if (spawnPoint.position.x - lastSpawnX < 2.0f) return; // Ngăn chướng ngại vật bị chồng lên nhau
+
+        //    int randomIndex = Random.Range(0, obstacles.Length);
+        //    Vector3 spawnOffset = new Vector3(i * 1.5f, 0, 0);
+        //    Instantiate(obstacles[randomIndex], spawnPoint.position + spawnOffset, Quaternion.identity);
+        //    lastSpawnX = spawnPoint.position.x;
+        //}
         for (int i = 0; i < spawnCount; i++)
         {
             int randomIndex = Random.Range(0, obstacles.Length);
@@ -64,17 +72,13 @@ public class ObstacleSpawner : MonoBehaviour
 
     void ModifySpawnRate()
     {
-        currentMinSpawnTime *= spawnAcceleration;
-        currentMaxSpawnTime *= spawnAcceleration;
+        currentMinSpawnTime = Mathf.Max(minSpawnLimit, currentMinSpawnTime * spawnAcceleration);
+        currentMaxSpawnTime = Mathf.Max(maxSpawnLimit, currentMaxSpawnTime * spawnAcceleration);
 
-        currentMinSpawnTime = Mathf.Max(0.4f, currentMinSpawnTime);
-        currentMaxSpawnTime = Mathf.Max(0.8f, currentMaxSpawnTime);
-
-        // 20% cơ hội làm thời gian spawn nhanh hơn cực nhanh
-        if (Random.value > 0.8f)
+        // 🎯 Nếu tốc độ của obstacles đạt giới hạn thì nền đất cũng không tăng tốc nữa
+        if (currentMinSpawnTime == minSpawnLimit)
         {
-            currentMinSpawnTime *= 0.8f;
-            currentMaxSpawnTime *= 0.8f;
+            FindFirstObjectByType<GameManager>().speedIncreaseRate = 0f;
         }
     }
 }

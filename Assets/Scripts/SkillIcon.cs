@@ -17,6 +17,7 @@ public class SkillIcon : MonoBehaviour
             {
                 Debug.Log("Player chạm vào skill: " + skillData.skillName);
                 ActivateSkill();
+                Destroy(gameObject);
             }
             else
             {

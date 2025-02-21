@@ -5,21 +5,24 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("UI Elements")]
     public TextMeshProUGUI currentTimeText;
     public TextMeshProUGUI bestTimeText;
     public TextMeshProUGUI messageText;
 
+    [Header("Game Settings")]
     private int currentTime = 0;
     private int bestTime = 0;
     private float timeElapsed = 0f;
 
+    [Header("Scrolling Settings")]
     public float speedScroller = 5f;
     public float speedIncreaseRate = 0.15f;
+    private float maxSpeed = 15f;
 
+    [Header("Ground Settings")]
     public GameObject[] grounds;
     private float groundWidth;
-
-    public GameObject[] obstacles;
 
     private bool isGameStarted = false;
     private bool isGameOver = false;
@@ -32,7 +35,16 @@ public class GameManager : MonoBehaviour
         bestTime = PlayerPrefs.GetInt("BestTime", 0);
         bestTimeText.text = bestTime.ToString("D5");
 
-        groundWidth = grounds[0].GetComponent<SpriteRenderer>().bounds.size.x;
+        // ✅ Kiểm tra mảng grounds để tránh lỗi NullReferenceException
+        if (grounds.Length > 0)
+        {
+            groundWidth = grounds[0].GetComponent<SpriteRenderer>().bounds.size.x;
+        }
+        else
+        {
+            Debug.LogError("⚠ Lỗi: Mảng 'grounds' rỗng hoặc chưa được gán trong Inspector!");
+        }
+        //groundWidth = grounds[0].GetComponent<SpriteRenderer>().bounds.size.x;
     }
 
     void Update()
@@ -46,19 +58,30 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (isGameOver && Input.GetKeyDown(KeyCode.Space))
+        if (isGameOver)
         {
-            RestartGame();
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                RestartGame();
+            }
+            return;
         }
 
+        UpdateTimer();
+        MoveGround();
+
+        // 🚀 Tăng tốc nhưng không vượt quá maxSpeed & dừng khi game over
+        if (!isGameOver)
+        {
+            speedScroller = Mathf.Min(speedScroller + Time.deltaTime * speedIncreaseRate, maxSpeed);
+        }
+    }
+
+    private void UpdateTimer()
+    {
         timeElapsed += Time.deltaTime;
         currentTime = (int)timeElapsed;
         currentTimeText.text = currentTime.ToString("D5");
-
-        MoveGround();
-        MoveObstacles();
-
-        speedScroller += Time.deltaTime * speedIncreaseRate;
     }
 
     private void StartGame()
@@ -71,22 +94,28 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        Time.timeScale = 1f;
+        if (isGameOver)
+        {
+            speedScroller = 5f; // 🔄 Chỉ reset tốc độ khi game đã kết thúc
+        }
+
+        timeElapsed = 0f; // 🕒 Reset thời gian về 0
+        currentTime = 0;  // ✅ Reset thời gian hiện tại để tránh hiển thị sai
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    private void MoveObstacles()
-    {
-        foreach (GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
-        {
-            obstacle.transform.position += Vector3.left * speedScroller * Time.deltaTime;
+    //private void MoveObstacles()
+    //{
+    //    foreach (GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
+    //    {
+    //        obstacle.transform.position += Vector3.left * speedScroller * Time.deltaTime;
 
-            if (obstacle.transform.position.x < -10f)
-            {
-                Destroy(obstacle);
-            }
-        }
-    }
+    //        if (obstacle.transform.position.x < -10f)
+    //        {
+    //            Destroy(obstacle);
+    //        }
+    //    }
+    //}
 
     private void MoveGround()
     {
@@ -106,7 +135,7 @@ public class GameManager : MonoBehaviour
     {
         isGameOver = true;
         Time.timeScale = 0f;
-        messageText.text = "Press SPACE to Restart"; // Hiển thị thông báo Restart
+        messageText.text = "Press SPACE to Restart";
         messageText.gameObject.SetActive(true);
 
         if (currentTime > bestTime)

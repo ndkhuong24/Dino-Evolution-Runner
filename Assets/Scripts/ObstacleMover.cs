@@ -7,16 +7,20 @@ public class ObstacleMover : MonoBehaviour
     void Start()
     {
         gameManager = Object.FindFirstObjectByType<GameManager>();
+
+        if (gameManager == null)
+        {
+            Debug.LogError("GameManager không tìm thấy trong scene!");
+            Destroy(gameObject);
+        }
     }
 
     void Update()
     {
-        if (gameManager != null)
-        {
-            transform.position += Vector3.left * gameManager.speedScroller * Time.deltaTime;
-        }
+        if (gameManager == null || gameManager.speedScroller <= 0) return;
 
-        // Xóa chướng ngại vật khi ra khỏi màn hình
+        transform.position += Vector3.left * gameManager.speedScroller * Time.deltaTime;
+
         if (transform.position.x < -10f)
         {
             Destroy(gameObject);
