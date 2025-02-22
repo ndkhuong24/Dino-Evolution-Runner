@@ -22,22 +22,10 @@ public class DinoController : MonoBehaviour
     void Update()
     {
         // Nhảy
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            Jump();
-        }
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) Jump();
 
-        // Nhấn Shift để cúi xuống
-        //if (Input.GetKey(KeyCode.LeftShift) && isGrounded)
-        //{
-        //    anim.SetBool("isDashing", true);
-        //}
-        //else
-        //{
-        //    anim.SetBool("isDashing", false);
-        //}
-        bool isDashing = Input.GetKey(KeyCode.LeftShift) && isGrounded;
-        anim.SetBool("isDashing", isDashing);
+        // Cúi xuống khi nhấn Shift
+        anim.SetBool("isDashing", Input.GetKey(KeyCode.LeftShift) && isGrounded);
     }
 
     private void Jump()

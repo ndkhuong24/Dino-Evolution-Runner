@@ -6,7 +6,7 @@ public class ObstacleMover : MonoBehaviour
 
     void Start()
     {
-        gameManager = Object.FindFirstObjectByType<GameManager>();
+        gameManager = FindAnyObjectByType<GameManager>();
 
         if (gameManager == null)
         {
@@ -17,9 +17,9 @@ public class ObstacleMover : MonoBehaviour
 
     void Update()
     {
-        if (gameManager == null || gameManager.speedScroller <= 0) return;
+        if (gameManager == null || gameManager.globalSpeed <= 0) return;
 
-        transform.position += Vector3.left * gameManager.speedScroller * Time.deltaTime;
+        transform.position += Vector3.left * gameManager.globalSpeed * Time.deltaTime;  // ✅ Dùng globalSpeed để đồng bộ
 
         if (transform.position.x < -10f)
         {
