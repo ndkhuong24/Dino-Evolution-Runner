@@ -1,8 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class SkillIcon : MonoBehaviour
 {
+    private KeyboardManager keyboardManager;
     public Skill skillData;
+
+    private void Awake()
+    {
+        keyboardManager = FindFirstObjectByType<KeyboardManager>();
+
+        if (keyboardManager == null)
+        {
+            Debug.LogError("Không tìm thấy KeyboardManager trong scene!");
+        }
+    }
 
     public void SetSkillData(Skill skill)
     {
@@ -15,22 +27,22 @@ public class SkillIcon : MonoBehaviour
         {
             if (skillData != null)
             {
-                Debug.Log("Player chạm vào skill: " + skillData.skillName);
-                ActivateSkill();
+                SetUpSkillToKeyboard();
                 Destroy(gameObject);
             }
-            else
-            {
-                Debug.LogError("SkillData bị thiếu trên skill object!");
-            }
         }
+    }
+
+    private void SetUpSkillToKeyboard()
+    {
+        keyboardManager.AssignSkillToKey(skillData);
     }
 
     private void ActivateSkill()
     {
         if (skillData != null)
         {
-            Debug.Log("Kích hoạt skill: " + skillData.skillName);
+            //Debug.Log("Kích hoạt skill: " + skillData.skillName);
             if (skillData.skillPrefab)
             {
                 Instantiate(skillData.skillPrefab, transform.position, Quaternion.identity);

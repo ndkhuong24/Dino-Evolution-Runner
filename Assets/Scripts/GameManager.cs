@@ -53,8 +53,8 @@ public class GameManager : MonoBehaviour
 
         if (grounds.Length > 0)
             groundWidth = grounds[0].GetComponent<SpriteRenderer>().bounds.size.x;
-        else
-            Debug.LogError("⚠ Lỗi: Mảng 'grounds' rỗng hoặc chưa được gán trong Inspector!");
+        //else
+        //    Debug.LogError("⚠ Lỗi: Mảng 'grounds' rỗng hoặc chưa được gán trong Inspector!");
     }
 
     private void UpdateTimer()

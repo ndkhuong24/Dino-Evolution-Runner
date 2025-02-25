@@ -37,12 +37,6 @@ public class SkillSpawner : MonoBehaviour
                 {
                     skillIcon.SetSkillData(skillToSpawn); // Truyền dữ liệu skill vào prefab
                 }
-                else
-                {
-                    Debug.LogError("SkillPrefab thiếu SkillIcon script!");
-                }
-
-                Debug.Log("Spawned skill: " + skillToSpawn.skillName);
             }
         }
     }
