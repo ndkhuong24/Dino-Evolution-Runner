@@ -20,9 +20,50 @@ public class KeyboardManager : MonoBehaviour
         //UpdateKeysVisual();
     }
 
-     public bool AssignSkillToKey(Skill skill)
+    private void Update()
     {
-        List<KeyManager> emtyKeys =  keys.Where(key => !key.HasSkill()).ToList();
+        DetectKeyPress();
+    }
+
+    private void DetectKeyPress()
+    {
+        foreach (var key in keyDictionary.Keys)
+        {
+            if (Input.GetKeyDown(key.ToLower()))
+            {
+                if (keyDictionary[key].HasSkill())
+                {
+                    Debug.Log($"Phím {key} được bấm và có skill!");
+                }
+                else
+                {
+                    Debug.Log($"Phím {key} được bấm nhưng chưa có skill.");
+                }
+            }
+        }
+    }
+
+    //private void DetectKeyPress()
+    //{
+    //    foreach (var key in keyDictionary.Keys)
+    //    {
+    //        if (Input.GetKeyDown(key.ToLower())) // Đảm bảo kiểm tra đúng phím
+    //        {
+    //            if (keyDictionary[key].HasSkill()) // Kiểm tra xem phím có skill không
+    //            {
+    //                Debug.Log($"Phím {key} được bấm và có skill!");
+    //            }
+    //            else
+    //            {
+    //                Debug.Log($"Phím {key} được bấm nhưng chưa có skill.");
+    //            }
+    //        }
+    //    }
+    //}
+
+    public bool AssignSkillToKey(Skill skill)
+    {
+        List<KeyManager> emtyKeys = keys.Where(key => !key.HasSkill()).ToList();
         foreach (var key in emtyKeys)
         {
             KeyManager randomKey = emtyKeys[Random.Range(0, emtyKeys.Count)];
