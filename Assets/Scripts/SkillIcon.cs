@@ -10,10 +10,10 @@ public class SkillIcon : MonoBehaviour
     {
         keyboardManager = FindFirstObjectByType<KeyboardManager>();
 
-        if (keyboardManager == null)
-        {
-            Debug.LogError("Không tìm thấy KeyboardManager trong scene!");
-        }
+        //if (keyboardManager == null)
+        //{
+        //    Debug.LogError("Không tìm thấy KeyboardManager trong scene!");
+        //}
     }
 
     public void SetSkillData(Skill skill)

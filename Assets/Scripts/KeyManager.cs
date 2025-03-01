@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,6 +33,22 @@ public class KeyManager : MonoBehaviour
         skillCanvasGroup.alpha = 1f;
         skillIconImage.sprite = skill.icon;
     }
+
+    internal void ActivateSkill()
+    {
+        if (assignedSkill != null)
+        {
+            assignedSkill = null;
+            keyCanvasGroup.alpha = 0.3f;
+            skillCanvasGroup.alpha = 0f;
+            skillIconImage.sprite = null;
+        }
+    }
+
+    //internal Skill GetAssignedSkill()
+    //{
+    //    return assignedSkill;
+    //}
 
     //public void SetSkill(Skill skill)
     //{
