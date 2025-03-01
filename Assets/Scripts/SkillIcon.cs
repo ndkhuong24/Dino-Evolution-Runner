@@ -4,19 +4,14 @@ using UnityEngine;
 public class SkillIcon : MonoBehaviour
 {
     private KeyboardManager keyboardManager;
-    public Skill skillData;
+    private Skill skillData;
 
     private void Awake()
     {
         keyboardManager = FindFirstObjectByType<KeyboardManager>();
-
-        //if (keyboardManager == null)
-        //{
-        //    Debug.LogError("Không tìm thấy KeyboardManager trong scene!");
-        //}
     }
 
-    public void SetSkillData(Skill skill)
+    public void SetSkillDataToSpawn(Skill skill)
     {
         skillData = skill;
     }
@@ -38,15 +33,15 @@ public class SkillIcon : MonoBehaviour
         keyboardManager.AssignSkillToKey(skillData);
     }
 
-    private void ActivateSkill()
-    {
-        if (skillData != null)
-        {
-            //Debug.Log("Kích hoạt skill: " + skillData.skillName);
-            if (skillData.skillPrefab)
-            {
-                Instantiate(skillData.skillPrefab, transform.position, Quaternion.identity);
-            }
-        }
-    }
+    //private void ActivateSkill()
+    //{
+    //    if (skillData != null)
+    //    {
+    //        //Debug.Log("Kích hoạt skill: " + skillData.skillName);
+    //        if (skillData.skillPrefab)
+    //        {
+    //            Instantiate(skillData.skillPrefab, transform.position, Quaternion.identity);
+    //        }
+    //    }
+    //}
 }

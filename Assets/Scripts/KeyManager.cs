@@ -17,8 +17,6 @@ public class KeyManager : MonoBehaviour
         if (keyCanvasGroup == null) keyCanvasGroup = GetComponent<CanvasGroup>();
         if (skillCanvasGroup == null) skillCanvasGroup = transform.Find("SkillIcon").GetComponent<CanvasGroup>();
         if (skillIconImage == null) skillIconImage = transform.Find("SkillIcon").GetComponent<Image>();
-
-        //    ResetKey(); // Initialize key state
     }
 
     public bool HasSkill()

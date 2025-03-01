@@ -49,7 +49,6 @@ public class KeyboardManager : MonoBehaviour
         {
             KeyManager randomKey = emtyKeys[Random.Range(0, emtyKeys.Count)];
 
-            //Gán skill vào phím được chọn
             randomKey.SetSkill(skill);
 
             return true;

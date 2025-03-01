@@ -35,7 +35,7 @@ public class SkillSpawner : MonoBehaviour
 
                 if (skillIcon != null)
                 {
-                    skillIcon.SetSkillData(skillToSpawn); // Truyền dữ liệu skill vào prefab
+                    skillIcon.SetSkillDataToSpawn(skillToSpawn); // Truyền dữ liệu skill vào prefab
                 }
             }
         }
