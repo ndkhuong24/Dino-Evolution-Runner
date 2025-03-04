@@ -10,6 +10,7 @@ public class KeyManager : MonoBehaviour
     private CanvasGroup skillCanvasGroup; // Controls transparency of the skill icon
     private Image skillIconImage; // Skill icon image 
 
+    private int currentAmmo;
     private Skill assignedSkill = null; // The currently assigned skill
 
     private void Awake()
@@ -27,6 +28,8 @@ public class KeyManager : MonoBehaviour
     internal void SetSkill(Skill skill)
     {
         assignedSkill = skill;
+        currentAmmo = skill.skillCost; // Gán số lần sử dụng ban đầu
+
         keyCanvasGroup.alpha = 1f;
         skillCanvasGroup.alpha = 1f;
         skillIconImage.sprite = skill.icon;
@@ -34,61 +37,82 @@ public class KeyManager : MonoBehaviour
 
     internal void ActivateSkill()
     {
-        if (assignedSkill != null)
+        if (assignedSkill == null)
         {
-            assignedSkill = null;
-            keyCanvasGroup.alpha = 0.3f;
-            skillCanvasGroup.alpha = 0f;
-            skillIconImage.sprite = null;
+            return;
+        }
+
+        GameObject player = GameObject.Find("Player"); // Tìm Player
+
+        if (player == null)
+        {
+            return;
+        }
+
+        switch (assignedSkill.skillName)
+        {
+            case "PortalSkill":
+            case "RifleSkill":
+                if (currentAmmo > 0)
+                {
+                    currentAmmo--;
+
+                    ActivateWeapon(player, assignedSkill.skillName == "PortalSkill" ? "PortalGun" : "RifleGun");
+
+                    if (currentAmmo == 0)
+                    {
+                        ResetSkill();
+                    }
+                }
+                break;
+            case "StealthSkill":
+                ResetSkill();
+                break;
+            default:
+                break;
         }
     }
 
-    //internal Skill GetAssignedSkill()
-    //{
-    //    return assignedSkill;
-    //}
+    private void ResetSkill()
+    {
+        if (assignedSkill != null) {
+            GameObject player = GameObject.Find("Player");
+            if(player!=null)
+            {
+                if (assignedSkill.skillName == "PortalSkill")
+                {
+                    DeactivateWeapon(player, "PortalGun");
+                }
+                else if (assignedSkill.skillName == "RifleSkill")
+                {
+                    DeactivateWeapon(player, "RifleGun");
+                }
+            }
+        }
 
-    //public void SetSkill(Skill skill)
-    //{
-    //    assignedSkill = skill;
-    //    UpdateVisual();
-    //}
+        assignedSkill = null;
+        currentAmmo = 0;
+        keyCanvasGroup.alpha = 0.3f;
+        skillCanvasGroup.alpha = 0f;
+        skillIconImage.sprite = null;
+    }
 
-    //public void ActivateSkill()
-    //{
-    //    if (assignedSkill != null)
-    //    {
-    //        Debug.Log($"Activating skill: {assignedSkill.skillName}");
+    private void DeactivateWeapon(GameObject player, string v)
+    {
+       Transform weaponTransform = player.transform.Find(v);
+        if (weaponTransform != null)
+        {
+            weaponTransform.gameObject.SetActive(false);
+        }
+    }
 
-    //        if (assignedSkill.skillPrefab)
-    //        {
-    //            Instantiate(assignedSkill.skillPrefab, transform.position, Quaternion.identity);
-    //        }
+    private void ActivateWeapon(GameObject player, string weaponName)
+    {
+        Transform weaponTransform = player.transform.Find(weaponName);
 
-    //        ResetKey(); // Reset key state after activation
-    //    }
-    //}
-
-    //private void ResetKey()
-    //{
-    //    assignedSkill = null;
-    //    UpdateVisual();
-    //}
-
-    //// **🟢 The missing UpdateVisual() function**
-    //public void UpdateVisual()
-    //{
-    //    if (assignedSkill != null)
-    //    {
-    //        skillIconImage.sprite = assignedSkill.icon; // Show skill icon
-    //        skillCanvasGroup.alpha = 1f; // Make skill icon visible
-    //        keyCanvasGroup.alpha = 1f; // Make key fully visible
-    //    }
-    //    else
-    //    {
-    //        skillIconImage.sprite = null; // Remove skill icon
-    //        skillCanvasGroup.alpha = 0f; // Hide skill icon
-    //        keyCanvasGroup.alpha = 0.5f; // Dim the key when empty
-    //    }
-    //}
+        if (weaponTransform != null)
+        {
+            weaponTransform.gameObject.SetActive(true);
+        }
+    }
 }

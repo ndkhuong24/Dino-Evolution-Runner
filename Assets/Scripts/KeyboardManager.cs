@@ -35,7 +35,7 @@ public class KeyboardManager : MonoBehaviour
             {
                 if (keyDictionary[key].HasSkill())
                 {
-                     keyDictionary[key].ActivateSkill();
+                    keyDictionary[key].ActivateSkill();
                 }
             }
         }
