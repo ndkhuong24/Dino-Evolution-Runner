@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3684593196209616361}
   - component: {fileID: 8726690226693469337}
   - component: {fileID: 6017673988381683576}
+  - component: {fileID: 6590969743025253882}
   m_Layer: 0
   m_Name: Cactus
   m_TagString: Obstacle
@@ -192,3 +193,15 @@ PolygonCollider2D:
       - {x: -0.06262255, y: -0.032560263}
       - {x: -0.030501306, y: -0.03149456}
   m_UseDelaunayMesh: 0
+--- !u!225 &6590969743025253882
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3120892067166940035}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

@@ -10,7 +10,6 @@ public class ObstacleMover : MonoBehaviour
 
         if (gameManager == null)
         {
-            //Debug.LogError("GameManager không tìm thấy trong scene!");
             Destroy(gameObject);
         }
     }

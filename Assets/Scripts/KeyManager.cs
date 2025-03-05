@@ -50,11 +50,14 @@ public class KeyManager : MonoBehaviour
                 if (currentAmmo > 0)
                 {
                     currentAmmo--;
+
                     if (portalGunController == null)
                     {
                         portalGunController = player.transform.Find("PortalGun").GetComponent<PortalGunController>();
                     }
+
                     portalGunController.ActivateWeapon();
+
                     if (currentAmmo == 0)
                     {
                         ResetSkill();
@@ -72,7 +75,8 @@ public class KeyManager : MonoBehaviour
                     }
                     rifleGunController.ActivateWeapon();
                     rifleGunController.ShootAnimation();
-                    if(currentAmmo == 0)
+                    rifleGunController.FireAmmo();
+                    if (currentAmmo == 0)
                     {
                         ResetSkill();
                     }
