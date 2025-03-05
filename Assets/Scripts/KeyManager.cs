@@ -1,23 +1,24 @@
-﻿using System;
-using UnityEditor.Experimental.GraphView;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class KeyManager : MonoBehaviour
 {
-    public string keyName; // Key name (Q, W, E, etc.)
-    private CanvasGroup keyCanvasGroup; // Controls transparency of the key
-    private CanvasGroup skillCanvasGroup; // Controls transparency of the skill icon
-    private Image skillIconImage; // Skill icon image 
+    public string keyName; // Tên phím (Q, W, E, ...)
+    private CanvasGroup keyCanvasGroup;
+    private CanvasGroup skillCanvasGroup;
+    private Image skillIconImage;
 
     private int currentAmmo;
-    private Skill assignedSkill = null; // The currently assigned skill
+    private Skill assignedSkill = null;
+
+    private RifleGunController rifleGunController;
+    private PortalGunController portalGunController;
 
     private void Awake()
     {
-        if (keyCanvasGroup == null) keyCanvasGroup = GetComponent<CanvasGroup>();
-        if (skillCanvasGroup == null) skillCanvasGroup = transform.Find("SkillIcon").GetComponent<CanvasGroup>();
-        if (skillIconImage == null) skillIconImage = transform.Find("SkillIcon").GetComponent<Image>();
+        keyCanvasGroup = GetComponent<CanvasGroup>();
+        skillCanvasGroup = transform.Find("SkillIcon").GetComponent<CanvasGroup>();
+        skillIconImage = transform.Find("SkillIcon").GetComponent<Image>();
     }
 
     public bool HasSkill()
@@ -28,7 +29,7 @@ public class KeyManager : MonoBehaviour
     internal void SetSkill(Skill skill)
     {
         assignedSkill = skill;
-        currentAmmo = skill.skillCost; // Gán số lần sử dụng ban đầu
+        currentAmmo = skill.skillCost; // Đặt số lần sử dụng ban đầu
 
         keyCanvasGroup.alpha = 1f;
         skillCanvasGroup.alpha = 1f;
@@ -37,29 +38,41 @@ public class KeyManager : MonoBehaviour
 
     internal void ActivateSkill()
     {
-        if (assignedSkill == null)
-        {
-            return;
-        }
+        if (assignedSkill == null) return;
 
-        GameObject player = GameObject.Find("Player"); // Tìm Player
+        GameObject player = GameObject.Find("Player");
 
-        if (player == null)
-        {
-            return;
-        }
+        if (player == null) return;
 
         switch (assignedSkill.skillName)
         {
             case "PortalSkill":
+                if (currentAmmo > 0)
+                {
+                    currentAmmo--;
+                    if (portalGunController == null)
+                    {
+                        portalGunController = player.transform.Find("PortalGun").GetComponent<PortalGunController>();
+                    }
+                    portalGunController.ActivateWeapon();
+                    if (currentAmmo == 0)
+                    {
+                        ResetSkill();
+                    }
+                }
+                break;
             case "RifleSkill":
                 if (currentAmmo > 0)
                 {
                     currentAmmo--;
 
-                    ActivateWeapon(player, assignedSkill.skillName == "PortalSkill" ? "PortalGun" : "RifleGun");
-
-                    if (currentAmmo == 0)
+                    if (rifleGunController == null)
+                    {
+                        rifleGunController = player.transform.Find("RifleGun").GetComponent<RifleGunController>();
+                    }
+                    rifleGunController.ActivateWeapon();
+                    rifleGunController.ShootAnimation();
+                    if(currentAmmo == 0)
                     {
                         ResetSkill();
                     }
@@ -68,24 +81,23 @@ public class KeyManager : MonoBehaviour
             case "StealthSkill":
                 ResetSkill();
                 break;
-            default:
-                break;
         }
     }
 
     private void ResetSkill()
     {
-        if (assignedSkill != null) {
+        if (assignedSkill != null)
+        {
             GameObject player = GameObject.Find("Player");
-            if(player!=null)
+            if (player != null)
             {
-                if (assignedSkill.skillName == "PortalSkill")
+                if (assignedSkill.skillName == "PortalSkill" && portalGunController != null)
                 {
-                    DeactivateWeapon(player, "PortalGun");
+                    portalGunController.DeactivateWeapon();
                 }
-                else if (assignedSkill.skillName == "RifleSkill")
+                else if (assignedSkill.skillName == "RifleSkill" && rifleGunController != null)
                 {
-                    DeactivateWeapon(player, "RifleGun");
+                    rifleGunController.DeactivateWeapon();
                 }
             }
         }
@@ -95,24 +107,5 @@ public class KeyManager : MonoBehaviour
         keyCanvasGroup.alpha = 0.3f;
         skillCanvasGroup.alpha = 0f;
         skillIconImage.sprite = null;
-    }
-
-    private void DeactivateWeapon(GameObject player, string v)
-    {
-       Transform weaponTransform = player.transform.Find(v);
-        if (weaponTransform != null)
-        {
-            weaponTransform.gameObject.SetActive(false);
-        }
-    }
-
-    private void ActivateWeapon(GameObject player, string weaponName)
-    {
-        Transform weaponTransform = player.transform.Find(weaponName);
-
-        if (weaponTransform != null)
-        {
-            weaponTransform.gameObject.SetActive(true);
-        }
     }
 }

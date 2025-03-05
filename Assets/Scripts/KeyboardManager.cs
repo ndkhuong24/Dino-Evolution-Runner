@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class KeyboardManager : MonoBehaviour
 {
@@ -18,8 +17,6 @@ public class KeyboardManager : MonoBehaviour
         {
             keyDictionary[key.keyName] = key;
         }
-
-        //UpdateKeysVisual();
     }
 
     private void Update()
@@ -56,47 +53,4 @@ public class KeyboardManager : MonoBehaviour
 
         return false;
     }
-
-    //public bool HasEmptyKey()
-    //{
-    //    foreach (var key in keys)
-    //    {
-    //        if (!key.HasSkill())
-    //        {
-    //            return true;
-    //        }
-    //    }
-    //    return false;
-    //}
-
-    //public bool AssignSkillToKey(Skill skill)
-    //{
-    //    foreach (var key in keys)
-    //    {
-    //        if (!key.HasSkill())
-    //        {
-    //            key.SetSkill(skill);
-    //            UpdateKeysVisual();
-    //            return true;
-    //        }
-    //    }
-    //    return false;
-    //}
-
-    //public void OnKeyPressed(string keyName)
-    //{
-    //    if (keyDictionary.TryGetValue(keyName, out KeyManager key))
-    //    {
-    //        key.ActivateSkill();
-    //        UpdateKeysVisual();
-    //    }
-    //}
-
-    //private void UpdateKeysVisual()
-    //{
-    //    foreach (var key in keys)
-    //    {
-    //        key.UpdateVisual();
-    //    }
-    //}
 }
