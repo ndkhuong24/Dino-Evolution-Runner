@@ -32,16 +32,4 @@ public class SkillIcon : MonoBehaviour
     {
         keyboardManager.AssignSkillToKey(skillData);
     }
-
-    //private void ActivateSkill()
-    //{
-    //    if (skillData != null)
-    //    {
-    //        //Debug.Log("Kích hoạt skill: " + skillData.skillName);
-    //        if (skillData.skillPrefab)
-    //        {
-    //            Instantiate(skillData.skillPrefab, transform.position, Quaternion.identity);
-    //        }
-    //    }
-    //}
 }

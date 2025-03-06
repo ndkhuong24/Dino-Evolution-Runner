@@ -3240,7 +3240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obstacles:
-  - {fileID: 3120892067166940035, guid: 75225636be6204646b3ad3f035ba42f9, type: 3}
+  - {fileID: 7429682804436719149, guid: 0ee20c8d58599e54d8d63e404ed3c248, type: 3}
   spawnPoint: {fileID: 487685801}
   minSpawnTime: 1.5
   maxSpawnTime: 3
@@ -6117,7 +6117,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 12.5, y: -12.5}
-  m_SizeDelta: {x: 55, y: 55}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &1021004366
 CanvasGroup:
@@ -6376,9 +6376,6 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 7350746968356734771, guid: 43247ded09682d6409061c0f21e87571, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1534110890}
     - targetCorrespondingSourceObject: {fileID: 7350746968356734771, guid: 43247ded09682d6409061c0f21e87571, type: 3}
       insertIndex: -1
       addedObject: {fileID: 60178531}
@@ -9342,11 +9339,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!4 &1534110890 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2340112900719661839, guid: d8b1cc510fd97944fbd08c1755c5349a, type: 3}
-  m_PrefabInstance: {fileID: 3486770584463222743}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1585209434
 GameObject:
   m_ObjectHideFlags: 0
@@ -12453,67 +12445,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a3cea9134c0eebe42b88f36044ecc057, type: 3}
---- !u!1001 &3486770584463222743
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1863463918}
-    m_Modifications:
-    - target: {fileID: 2340112900719661839, guid: d8b1cc510fd97944fbd08c1755c5349a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2340112900719661839, guid: d8b1cc510fd97944fbd08c1755c5349a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.019543765
-      objectReference: {fileID: 0}
-    - target: {fileID: 2340112900719661839, guid: d8b1cc510fd97944fbd08c1755c5349a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.046797875
-      objectReference: {fileID: 0}
-    - target: {fileID: 2340112900719661839, guid: d8b1cc510fd97944fbd08c1755c5349a, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2340112900719661839, guid: d8b1cc510fd97944fbd08c1755c5349a, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2340112900719661839, guid: d8b1cc510fd97944fbd08c1755c5349a, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2340112900719661839, guid: d8b1cc510fd97944fbd08c1755c5349a, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2340112900719661839, guid: d8b1cc510fd97944fbd08c1755c5349a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2340112900719661839, guid: d8b1cc510fd97944fbd08c1755c5349a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2340112900719661839, guid: d8b1cc510fd97944fbd08c1755c5349a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3298562785772556281, guid: d8b1cc510fd97944fbd08c1755c5349a, type: 3}
-      propertyPath: m_Name
-      value: RifleGunAmmo
-      objectReference: {fileID: 0}
-    - target: {fileID: 3298562785772556281, guid: d8b1cc510fd97944fbd08c1755c5349a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d8b1cc510fd97944fbd08c1755c5349a, type: 3}
 --- !u!1001 &7681041486267067655
 PrefabInstance:
   m_ObjectHideFlags: 0

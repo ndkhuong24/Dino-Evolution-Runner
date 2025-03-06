@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2340112900719661839}
   - component: {fileID: 9088997425171113786}
   - component: {fileID: 4996261693706028548}
+  - component: {fileID: -1144704031118738654}
   m_Layer: 0
   m_Name: RifleGunAmmo
   m_TagString: Ammo
@@ -65,7 +66,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -101,6 +102,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8692620dfd582924895e69ffa1bdcdcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 15
+--- !u!50 &-1144704031118738654
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3298562785772556281}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0
 --- !u!1 &6902866768698619652
 GameObject:
   m_ObjectHideFlags: 0
