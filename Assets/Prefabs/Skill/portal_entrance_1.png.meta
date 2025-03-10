@@ -116,12 +116,12 @@ TextureImporter:
       name: portal_entrance_1_0
       rect:
         serializedVersion: 2
-        x: 8
-        y: 15
-        width: 26
-        height: 115
+        x: 0
+        y: 0
+        width: 42
+        height: 145
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: b3dd70c6557a7304fbbb0a1d74e7886b
     internalID: 0
     vertices: []
     indices: 

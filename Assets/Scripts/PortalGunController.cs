@@ -1,13 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 
 public class PortalGunController : MonoBehaviour
 {
-    //private Animator animator;
-
-    //private void Awake()
-    //{
-    //    animator = GetComponent<Animator>();
-    //}
+    public Transform firePoint;
+    public GameObject ammoPrefab;
 
     public void ActivateWeapon()
     {
@@ -19,8 +17,14 @@ public class PortalGunController : MonoBehaviour
         gameObject.SetActive(false); // ✅ Tắt PortalGun
     }
 
-    //public void StartPortalAnimation()
-    //{
-    //    animator.SetTrigger("openPortal"); // ✅ Kích hoạt animation mở cổng
-    //}
+    internal void FireAmmo()
+    {
+        StartCoroutine(SpawnBulletAfterFrame());
+    }
+
+    private IEnumerator SpawnBulletAfterFrame()
+    {
+        yield return new WaitForEndOfFrame();
+        Instantiate(ammoPrefab, firePoint.position, firePoint.rotation);
+    }
 }
