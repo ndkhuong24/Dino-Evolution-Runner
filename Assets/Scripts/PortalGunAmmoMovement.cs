@@ -1,11 +1,19 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PortalGunAmmoMovement : MonoBehaviour
 {
     public float speed = 15f;
-    public Vector3 direction = Vector3.right; // Hướng di chuyển của đạn (mặc định là sang phải)
     private Animator animator;
     private float destroyBoundaryX; // Giới hạn để hủy đạn khi ra khỏi màn hình
+
+    [Header("Portal Settings")]
+    public GameObject portalEntrancePrefab; // Prefab của cổng vào
+    public GameObject portalExitPrefab; // Prefab của cổng ra
+    public float portalOffset = 1.5f; // Khoảng cách giữa cổng và vật cản
+
+    private PortalEntranceMangager portalEntranceMangager;
+    private PortalExitManager portalExitManager;
 
     private void Awake()
     {
@@ -21,12 +29,63 @@ public class PortalGunAmmoMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.position += direction * speed * Time.fixedDeltaTime;
+        transform.position += Vector3.right * speed * Time.fixedDeltaTime;
 
-        // Kiểm tra nếu viên đạn ra khỏi giới hạn màn hình thì hủy nó
         if (transform.position.x > destroyBoundaryX)
         {
             Destroy(gameObject);
         }
+
+        CheckObstacleDistance();
     }
+
+    private void CheckObstacleDistance()
+    {
+        // Tìm tất cả các vật cản
+        GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+
+        foreach (GameObject obstacle in obstacles)
+        {
+            // tinh khoang cach giua vi tri cua dan va vat can
+            float distance = Vector3.Distance(transform.position, obstacle.transform.position);
+
+            if (distance <= portalOffset)
+            {
+                CreatePortals(obstacle.transform.position);
+                Destroy(gameObject);
+                break;
+            }
+        }
+    }
+
+    private void CreatePortals(Vector3 obstaclePos)
+    {
+        Vector3 portalEntrancePos = obstaclePos - Vector3.right * portalOffset;
+        Vector3 portalExitPos = obstaclePos + Vector3.right * portalOffset;
+
+        // Instantiate Portal Entrance
+        GameObject entranceObj = Instantiate(portalEntrancePrefab, portalEntrancePos, Quaternion.identity);
+        PortalEntranceMangager entranceManager = entranceObj.GetComponent<PortalEntranceMangager>();
+        if (entranceManager != null)
+        {
+            entranceManager.ActionAnimator();
+        }
+        else
+        {
+            Debug.LogError("PortalEntranceMangager is missing on Portal Entrance prefab!");
+        }
+
+        // Instantiate Portal Exit
+        GameObject exitObj = Instantiate(portalExitPrefab, portalExitPos, Quaternion.identity);
+        PortalExitManager exitManager = exitObj.GetComponent<PortalExitManager>();
+        if (exitManager != null)
+        {
+            exitManager.ActionAnimator();
+        }
+        else
+        {
+            Debug.LogError("PortalExitManager is missing on Portal Exit prefab!");
+        }
+    }
+
 }
