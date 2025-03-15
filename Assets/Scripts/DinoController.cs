@@ -4,6 +4,7 @@ public class DinoController : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Animator anim;
+    private float originalGravity; // Lưu trọng lực ban đầu
 
     [Header("Jump Settings")]
     public float jumpForce = 12.5f; // Lực nhảy tối ưu
@@ -16,6 +17,7 @@ public class DinoController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        originalGravity = gravityScale; // Lưu trọng lực ban đầu
         rb.gravityScale = gravityScale;
     }
 
@@ -47,5 +49,14 @@ public class DinoController : MonoBehaviour
         {
             FindFirstObjectByType<GameManager>().EndGame();
         }
+    }
+
+    // ⚡ HÀM MỚI: Bật/Tắt trọng lực khi đi qua portal
+    public void SetGravity(bool enable)
+    {
+        if (enable)
+            rb.gravityScale = originalGravity; // Trả về trọng lực ban đầu
+        else
+            rb.gravityScale = 0f; // Tắt trọng lực khi đi qua cổng
     }
 }

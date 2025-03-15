@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4906211432428229996}
   - component: {fileID: 887254424951916241}
   - component: {fileID: 4126359852694941446}
+  - component: {fileID: 7685030736101192029}
   m_Layer: 0
   m_Name: PortalExit
   m_TagString: Untagged
@@ -185,3 +186,30 @@ PolygonCollider2D:
     - - {x: 0, y: 0.765625}
       - {x: 0, y: -0.765625}
   m_UseDelaunayMesh: 0
+--- !u!50 &7685030736101192029
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8719152051207652326}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

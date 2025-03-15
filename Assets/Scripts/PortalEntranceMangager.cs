@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PortalEntranceMangager : MonoBehaviour
 {
@@ -15,22 +14,22 @@ public class PortalEntranceMangager : MonoBehaviour
     private void FixedUpdate()
     {
         transform.position += Vector3.left * gameManager.globalSpeed * Time.fixedDeltaTime;
-
-        if (transform.position.x < -10f)
-        {
-            Destroy(gameObject);
-        }
+        if (transform.position.x < -10f) Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            // Ẩn Player khi chạm vào cổng
-            collision.gameObject.SetActive(false);
+            DinoController playerController = collision.GetComponent<DinoController>();
+            Collider2D col = collision.GetComponent<Collider2D>();
 
-            // Bật isTrigger của Player để tránh va chạm khác làm end game
-            collision.GetComponent<Collider2D>().isTrigger = true;
+            if (playerController != null && col != null)
+            {
+                playerController.SetGravity(false); // Tắt trọng lực
+                col.isTrigger = true;              // Tránh va chạm
+                collision.GetComponent<SpriteRenderer>().enabled = false;
+            }
         }
     }
 
