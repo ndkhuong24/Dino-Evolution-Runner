@@ -28,7 +28,13 @@ public class PortalEntranceMangager : MonoBehaviour
             {
                 playerController.SetGravity(false); // Tắt trọng lực
                 col.isTrigger = true;              // Tránh va chạm
-                collision.GetComponent<SpriteRenderer>().enabled = false;
+                //collision.GetComponent<SpriteRenderer>().enabled = false;
+
+                SpriteRenderer[] renderers = collision.GetComponentsInChildren<SpriteRenderer>();
+                foreach (var renderer in renderers)
+                {
+                    renderer.enabled = false;
+                }
             }
         }
     }

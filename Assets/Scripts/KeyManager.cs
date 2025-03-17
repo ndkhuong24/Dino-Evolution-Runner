@@ -5,16 +5,18 @@ using UnityEngine.UI;
 
 public class KeyManager : MonoBehaviour
 {
+    [Header("KeySetting")]
     public string keyName; // Tên phím (Q, W, E, ...)
     private CanvasGroup keyCanvasGroup;
     private CanvasGroup skillCanvasGroup;
     private Image skillIconImage;
 
+    [Header("AmmoSetting")]
     public TextMeshProUGUI ammoText;
-
     private int currentAmmo;
     private Skill assignedSkill = null;
 
+    [Header("SkillSetting")]
     private RifleGunController rifleGunController;
     private PortalGunController portalGunController;
 
