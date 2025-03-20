@@ -58,8 +58,12 @@ public class KeyManager : MonoBehaviour
                 {
                     if (portalGunController == null)
                     {
+                        rifleGunController = player.transform.Find("RifleGun").GetComponent<RifleGunController>();
                         portalGunController = player.transform.Find("PortalGun").GetComponent<PortalGunController>();
                     }
+
+                    rifleGunController.DeactivateWeapon();
+                    portalGunController.DeactivateWeapon();
 
                     portalGunController.ActivateWeapon();
                     portalGunController.FireAmmo();
@@ -79,7 +83,11 @@ public class KeyManager : MonoBehaviour
                     if (rifleGunController == null)
                     {
                         rifleGunController = player.transform.Find("RifleGun").GetComponent<RifleGunController>();
+                        portalGunController = player.transform.Find("PortalGun").GetComponent<PortalGunController>();
                     }
+
+                    rifleGunController.DeactivateWeapon();
+                    portalGunController.DeactivateWeapon();
 
                     rifleGunController.ActivateWeapon();
                     rifleGunController.ShootAnimation();
