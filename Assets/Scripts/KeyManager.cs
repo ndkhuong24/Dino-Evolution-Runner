@@ -21,18 +21,26 @@ public class KeyManager : MonoBehaviour
     private PortalGunController portalGunController;
 
     private bool isStealthActive = false; // Biến kiểm tra kỹ năng StealthSkill có đang hoạt động không
+    private GameObject player;
+    private Collider2D playerCollider;
 
     private void Awake()
     {
         keyCanvasGroup = GetComponent<CanvasGroup>();
         skillCanvasGroup = transform.Find("SkillIcon").GetComponent<CanvasGroup>();
         skillIconImage = transform.Find("SkillIcon").GetComponent<Image>();
+
+        player = GameObject.Find("Player");
+        if (player != null) playerCollider = player.GetComponent<Collider2D>();
+
+        if (player != null)
+        {
+            rifleGunController = player.transform.Find("RifleGun")?.GetComponent<RifleGunController>();
+            portalGunController = player.transform.Find("PortalGun")?.GetComponent<PortalGunController>();
+        }
     }
 
-    public bool HasSkill()
-    {
-        return assignedSkill != null;
-    }
+    public bool HasSkill() => assignedSkill != null;
 
     internal void SetSkill(Skill skill)
     {
@@ -46,175 +54,111 @@ public class KeyManager : MonoBehaviour
 
     internal void ActivateSkill()
     {
-        if (assignedSkill == null) return;
-
-        GameObject player = GameObject.Find("Player");
-        if (player == null) return;
+        if (assignedSkill == null || player == null) return;
 
         switch (assignedSkill.skillName)
         {
             case "PortalSkill":
                 if (currentAmmo > 0)
                 {
-                    if (portalGunController == null)
-                    {
-                        rifleGunController = player.transform.Find("RifleGun").GetComponent<RifleGunController>();
-                        portalGunController = player.transform.Find("PortalGun").GetComponent<PortalGunController>();
-                    }
-
-                    rifleGunController.DeactivateWeapon();
-                    portalGunController.DeactivateWeapon();
-
-                    portalGunController.ActivateWeapon();
+                    SwitchWeapon(portalGunController);
                     portalGunController.FireAmmo();
-
-                    currentAmmo--;
-                    UpdateAmmoText();
-
-                    if (currentAmmo == 0)
-                    {
-                        Invoke(nameof(ResetSkill), 0.2f);
-                    }
+                    UseAmmo();
                 }
                 break;
             case "RifleSkill":
                 if (currentAmmo > 0)
                 {
-                    if (rifleGunController == null)
-                    {
-                        rifleGunController = player.transform.Find("RifleGun").GetComponent<RifleGunController>();
-                        portalGunController = player.transform.Find("PortalGun").GetComponent<PortalGunController>();
-                    }
-
-                    rifleGunController.DeactivateWeapon();
-                    portalGunController.DeactivateWeapon();
-
-                    rifleGunController.ActivateWeapon();
+                    SwitchWeapon(rifleGunController);
                     rifleGunController.ShootAnimation();
                     rifleGunController.FireAmmo();
-
-                    currentAmmo--;
-                    UpdateAmmoText();
-
-                    if (currentAmmo == 0)
-                    {
-                        Invoke(nameof(ResetSkill), 0.2f);
-                    }
+                    UseAmmo();
                 }
                 break;
             case "StealthSkill":
-                if (isStealthActive) return; // Ngăn chặn kích hoạt lại khi đang tàng hình
-                StartCoroutine(ActivateStealthSkill());
-                ResetSkill();
+                if (!isStealthActive)
+                {
+                    StartCoroutine(ActivateStealthSkill());
+                    ResetSkill();
+                }
                 break;
         }
     }
 
+    private void UseAmmo()
+    {
+        currentAmmo--;
+        UpdateAmmoText();
+        if (currentAmmo == 0) Invoke(nameof(ResetSkill), 0.2f);
+    }
+
+    private void SwitchWeapon(MonoBehaviour weapon)
+    {
+        rifleGunController?.DeactivateWeapon();
+        portalGunController?.DeactivateWeapon();
+        weapon?.gameObject.SetActive(true);
+    }
+
     private void UpdateAmmoText()
     {
-        if (currentAmmo > 0)
-        {
-            ammoText.text = "Ammo: " + currentAmmo.ToString();
-        }
-        else
-        {
-            ammoText.text = "";
-        }
+        ammoText.text = currentAmmo > 0 ? $"Ammo: {currentAmmo}" : "";
     }
 
     private IEnumerator ActivateStealthSkill()
     {
         isStealthActive = true; // Kích hoạt trạng thái tàng hình
-        float elapsedTime = 0f;
         float skillDuration = 6f;
+        float elapsedTime = 0f;
 
         while (elapsedTime < skillDuration)
         {
-            ApplyStealthEffect(); // Áp dụng hiệu ứng lên tất cả vật cản hiện tại
-            yield return new WaitForSeconds(0.1f); // Kiểm tra lại mỗi 0.1s
+            ApplyStealthEffect();
+            yield return new WaitForSeconds(0.1f);
             elapsedTime += 0.1f;
         }
 
-        isStealthActive = false; // Hết hiệu lực
+        isStealthActive = false;
 
-        if (elapsedTime > skillDuration)
+        while (IsPlayerInsideObstacle() || IsObstacleInFront())
         {
-            GameObject player = GameObject.Find("Player");
-            if (player != null)
-            {
-                Collider2D playerCollider = player.GetComponent<Collider2D>();
-                if (playerCollider != null)
-                {
-                    GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
-                    bool stillTouching = false;
-
-                    foreach (GameObject obstacle in obstacles)
-                    {
-                        Collider2D obstacleCollider = obstacle.GetComponent<Collider2D>();
-                        if (obstacleCollider != null && obstacleCollider.isTrigger && playerCollider.IsTouching(obstacleCollider))
-                        {
-                            stillTouching = true;
-                            break;
-                        }
-                    }
-
-                    if (stillTouching)
-                    {
-                        yield return new WaitForSeconds(0.5f); // Đợi thêm 0.5s rồi kiểm tra lại
-                        elapsedTime -= 0.5f; // Giảm thời gian lại để tiếp tục vòng lặp
-                    }
-                    else
-                    {
-                        ResetStealthEffect(); // Nếu không còn chạm thì khôi phục trạng thái
-                    }
-                }
-            }
+            yield return new WaitForSeconds(0.5f);
+            elapsedTime += 0.5f;
         }
+
+        ResetStealthEffect();
+    }
+
+    private bool IsObstacleInFront()
+    {
+        return Physics2D.Raycast(player.transform.position, Vector2.right, 1f, LayerMask.GetMask("Obstacle"));
+    }
+
+    private bool IsPlayerInsideObstacle()
+    {
+        return Physics2D.OverlapBox(player.transform.position, new Vector2(1f, 1f), 0f, LayerMask.GetMask("Obstacle"));
     }
 
     private void ApplyStealthEffect()
     {
-        GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
-
-        foreach (GameObject obstacle in obstacles)
+        foreach (var obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
         {
-            SpriteRenderer sr = obstacle.GetComponent<SpriteRenderer>();
-            Collider2D col = obstacle.GetComponent<Collider2D>();
+            var sr = obstacle.GetComponent<SpriteRenderer>();
+            var col = obstacle.GetComponent<Collider2D>();
 
-            if (sr != null)
-            {
-                Color newColor = sr.color;
-                newColor.a = 0.5f; // Giảm độ alpha
-                sr.color = newColor;
-            }
-
-            if (col != null)
-            {
-                col.isTrigger = true; // Cho phép nhân vật đi xuyên qua
-            }
+            if (sr != null) sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.5f);
+            if (col != null) col.isTrigger = true;
         }
     }
 
     private void ResetStealthEffect()
     {
-        GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
-
-        foreach (GameObject obstacle in obstacles)
+        foreach (var obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
         {
-            SpriteRenderer sr = obstacle.GetComponent<SpriteRenderer>();
-            Collider2D col = obstacle.GetComponent<Collider2D>();
+            var sr = obstacle.GetComponent<SpriteRenderer>();
+            var col = obstacle.GetComponent<Collider2D>();
 
-            if (sr != null)
-            {
-                Color newColor = sr.color;
-                newColor.a = 1f; // Khôi phục alpha ban đầu
-                sr.color = newColor;
-            }
-
-            if (col != null)
-            {
-                col.isTrigger = false; // Khôi phục va chạm
-            }
+            if (sr != null) sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
+            if (col != null) col.isTrigger = false;
         }
     }
 
@@ -222,18 +166,14 @@ public class KeyManager : MonoBehaviour
     {
         if (assignedSkill != null)
         {
-            GameObject player = GameObject.Find("Player");
-            if (player != null)
+            if (assignedSkill.skillName == "PortalSkill")
             {
-                if (assignedSkill.skillName == "PortalSkill" && portalGunController != null)
-                {
-                    portalGunController.DeactivateWeapon();
-                }
-                else if (assignedSkill.skillName == "RifleSkill" && rifleGunController != null)
-                {
-                    rifleGunController.ResetShootAnimation();
-                    rifleGunController.DeactivateWeapon();
-                }
+                portalGunController?.DeactivateWeapon();
+            }
+            else if (assignedSkill.skillName == "RifleSkill")
+            {
+                rifleGunController?.ResetShootAnimation();
+                rifleGunController?.DeactivateWeapon();
             }
         }
 

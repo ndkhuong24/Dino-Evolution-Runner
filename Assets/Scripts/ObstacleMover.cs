@@ -4,7 +4,7 @@ public class ObstacleMover : MonoBehaviour
 {
     private GameManager gameManager;
 
-    void Start()
+    private void Start()
     {
         gameManager = FindAnyObjectByType<GameManager>();
 
@@ -14,7 +14,7 @@ public class ObstacleMover : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
         if (gameManager == null || gameManager.globalSpeed <= 0) return;
 

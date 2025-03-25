@@ -18,7 +18,17 @@ public class RifleGunAmmoMovement : MonoBehaviour
     {
         if (other.CompareTag("Obstacle")) // Kiểm tra nếu va chạm với Obstacle
         {
-            Destroy(other.gameObject); // Hủy vật cản
+            Transform parent = other.transform.parent; // Kiểm tra có parent không
+
+            if (parent != null && parent.name == "ObstacleGroup")
+            {
+                Destroy(parent.gameObject); // Nếu thuộc group, hủy toàn bộ group
+            }
+            else
+            {
+                Destroy(other.gameObject); // Nếu không thuộc group, chỉ hủy object
+            }
+
             Destroy(gameObject); // Hủy đạn
         }
     }

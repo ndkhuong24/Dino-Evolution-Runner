@@ -19,12 +19,8 @@ public class ObstacleSpawner : MonoBehaviour
     private float currentMinSpawnTime;
     private float currentMaxSpawnTime;
 
-    private GameManager gameManager;
-
-    void Start()
+    private void Start()
     {
-        gameManager = FindAnyObjectByType<GameManager>();
-
         currentMinSpawnTime = minSpawnTime;
         currentMaxSpawnTime = maxSpawnTime;
         minSpawnLimit = minSpawnTime * 0.7f;
@@ -33,42 +29,66 @@ public class ObstacleSpawner : MonoBehaviour
         SetNextSpawnTime();
     }
 
-    void Update()
+    private void Update()
     {
         if (Time.time >= nextSpawnTime)
         {
-            SpawnObstacle();
+            SpawnObstacleGroup();
             SetNextSpawnTime();
             ModifySpawnRate();
         }
     }
 
-    void SpawnObstacle()
+    private void SpawnObstacleGroup()
     {
-        int spawnCount = Random.value < doubleSpawnChance ? 2 : 1;// Chỉ còn spawn 1 hoặc 2 chướng ngại vật
+        if (obstacles == null || obstacles.Length == 0)
+        {
+            Debug.LogError("ObstacleSpawner: No obstacles assigned in the array!");
+            return;
+        }
+
+        int spawnCount = Random.value < doubleSpawnChance ? 2 : 1;
+
+        GameObject obstacleGroup = null;
+        if (spawnCount > 1)
+        {
+            obstacleGroup = new GameObject("ObstacleGroup"); // Tạo nhóm nếu có hơn 1 obstacle
+        }
 
         for (int i = 0; i < spawnCount; i++)
         {
             int randomIndex = Random.Range(0, obstacles.Length);
+
+            if (obstacles[randomIndex] == null)
+            {
+                Debug.LogError($"ObstacleSpawner: obstacles[{randomIndex}] is null!");
+                continue;
+            }
+
             Vector3 spawnOffset = new Vector3(i * 1.5f, 0, 0);
-            Instantiate(obstacles[randomIndex], spawnPoint.position + spawnOffset, Quaternion.identity);
+            GameObject spawnedObstacle = Instantiate(obstacles[randomIndex], spawnPoint.position + spawnOffset, Quaternion.identity);
+
+            if (spawnedObstacle == null)
+            {
+                Debug.LogError("ObstacleSpawner: Failed to instantiate obstacle!");
+                continue;
+            }
+
+            if (obstacleGroup != null)
+            {
+                spawnedObstacle.transform.parent = obstacleGroup.transform; // Chỉ gán parent nếu có group
+            }
         }
     }
 
-    void SetNextSpawnTime()
+    private void SetNextSpawnTime()
     {
         nextSpawnTime = Time.time + Random.Range(currentMinSpawnTime, currentMaxSpawnTime);
     }
 
-    void ModifySpawnRate()
+    private void ModifySpawnRate()
     {
         currentMinSpawnTime = Mathf.Max(minSpawnLimit, currentMinSpawnTime * spawnAcceleration);
         currentMaxSpawnTime = Mathf.Max(maxSpawnLimit, currentMaxSpawnTime * spawnAcceleration);
-
-        // 🎯 Nếu tốc độ của obstacles đạt giới hạn thì nền đất cũng không tăng tốc nữa
-        //if (currentMinSpawnTime == minSpawnLimit)
-        //{
-        //    FindFirstObjectByType<GameManager>().speedIncreaseRate = 0f;
-        //}
     }
 }
