@@ -11,7 +11,7 @@ public class DinoController : MonoBehaviour
     private bool isGrounded = true;
 
     [Header("Game Settings")]
-    public float gravityScale = 2.5f; // Trọng lực giống game gốc
+    public float gravityScale = 2.5f; 
 
     void Start()
     {
@@ -23,11 +23,9 @@ public class DinoController : MonoBehaviour
 
     void Update()
     {
-        // Nhảy
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded) Jump();
 
-        // Cúi xuống khi nhấn Shift
-        anim.SetBool("isDashing", Input.GetKey(KeyCode.LeftShift) && isGrounded);
+        //anim.SetBool("isDashing", Input.GetKey(KeyCode.LeftShift) && isGrounded);
     }
 
     private void Jump()
@@ -51,12 +49,12 @@ public class DinoController : MonoBehaviour
         }
     }
 
-    // ⚡ HÀM MỚI: Bật/Tắt trọng lực khi đi qua portal
+    // Bật-Tắt trọng lực khi đi qua portal
     public void SetGravity(bool enable)
     {
         if (enable)
-            rb.gravityScale = originalGravity; // Trả về trọng lực ban đầu
+            rb.gravityScale = originalGravity; 
         else
-            rb.gravityScale = 0f; // Tắt trọng lực khi đi qua cổng
+            rb.gravityScale = 0f;
     }
 }

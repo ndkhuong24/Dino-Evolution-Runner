@@ -51,10 +51,7 @@ public class GameManager : MonoBehaviour
         bestTime = PlayerPrefs.GetInt("BestTime", 0);
         bestTimeText.text = bestTime.ToString("D5");
 
-        if (grounds.Length > 0)
-            groundWidth = grounds[0].GetComponent<SpriteRenderer>().bounds.size.x;
-        //else
-        //    Debug.LogError("⚠ Lỗi: Mảng 'grounds' rỗng hoặc chưa được gán trong Inspector!");
+        if (grounds.Length > 0) groundWidth = grounds[0].GetComponent<SpriteRenderer>().bounds.size.x;
     }
 
     private void UpdateTimer()

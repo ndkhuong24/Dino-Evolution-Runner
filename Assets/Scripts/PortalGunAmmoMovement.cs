@@ -11,6 +11,7 @@ public class PortalGunAmmoMovement : MonoBehaviour
     public GameObject portalEntrancePrefab; // Prefab của cổng vào
     public GameObject portalExitPrefab; // Prefab của cổng ra
     public float portalOffset = 1.5f; // Khoảng cách giữa cổng và vật cản
+    public float portalOffsetGroup = 2.5f; // Khoảng cách giữa cổng và nhóm vật cản
 
     private PortalEntranceMangager portalEntranceMangager;
     private PortalExitManager portalExitManager;
@@ -36,56 +37,137 @@ public class PortalGunAmmoMovement : MonoBehaviour
             Destroy(gameObject);
         }
 
-        CheckObstacleDistance();
+        //CheckObstacleDistance();
     }
 
-    private void CheckObstacleDistance()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Tìm tất cả các vật cản
-        GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+        Transform parentGroup = collision.transform.parent;
 
-        foreach (GameObject obstacle in obstacles)
+        //Kiểm tra xem có Group hay không
+        if (parentGroup != null && parentGroup.CompareTag("ObstacleGroup"))
         {
-            // tinh khoang cach giua vi tri cua dan va vat can
-            float distance = Vector3.Distance(transform.position, obstacle.transform.position);
+            CreatePortals(parentGroup);
+            Destroy(gameObject);
+        }
+        else if (collision.CompareTag("Obstacle"))
+        {
+            CreatePortals(collision.transform);
+            Destroy(gameObject);
+        }
+    }
 
-            if (distance <= portalOffset)
+    private void CreatePortals(Transform target)
+    {
+        Vector3 portalEntrancePos;
+        Vector3 portalExitPos;
+
+        if (target.CompareTag("ObstacleGroup"))
+        {
+            //Tìm vị trí trung tâm của Group
+            Bounds groupBounds = GetGroupBounds(target);
+            portalEntrancePos = groupBounds.center - Vector3.right * portalOffsetGroup;
+            portalExitPos = groupBounds.center + Vector3.right * portalOffsetGroup;
+        }
+        else
+        {
+            //Nếu chỉ có một Obstacle, đặt portal như cũ
+            portalEntrancePos = target.position - Vector3.right * portalOffset;
+            portalExitPos = target.position + Vector3.right * portalOffset;
+        }
+
+        //Tạo cổng vào
+        GameObject entranceObj = Instantiate(portalEntrancePrefab, portalEntrancePos, Quaternion.identity);
+        portalEntranceMangager = entranceObj.GetComponent<PortalEntranceMangager>();
+        if (portalEntranceMangager != null) portalEntranceMangager.ActionAnimator();
+
+        //Tạo cổng ra
+        GameObject exitObj = Instantiate(portalExitPrefab, portalExitPos, Quaternion.identity);
+        portalExitManager = exitObj.GetComponent<PortalExitManager>();
+        if (portalExitManager != null) portalExitManager.ActionAnimator();
+    }
+
+    private Bounds GetGroupBounds(Transform target)
+    {
+        Bounds bounds = new Bounds(target.position, Vector3.zero);
+
+        foreach (Transform child in target)
+        {
+            Collider2D col = child.GetComponent<Collider2D>();
+            if (col != null)
             {
-                CreatePortals(obstacle.transform.position);
-                Destroy(gameObject);
-                break;
+                bounds.Encapsulate(col.bounds);
             }
         }
+
+        return bounds;
     }
 
-    private void CreatePortals(Vector3 obstaclePos)
-    {
-        Vector3 portalEntrancePos = obstaclePos - Vector3.right * portalOffset;
-        Vector3 portalExitPos = obstaclePos + Vector3.right * portalOffset;
+    //Code mới
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("Obstacle") || collision.CompareTag("ObstacleGroup"))
+    //    {
+    //        CreatePortals(collision.transform.position);
+    //        Destroy(gameObject);
+    //    }
+    //}
 
-        // Instantiate Portal Entrance
-        GameObject entranceObj = Instantiate(portalEntrancePrefab, portalEntrancePos, Quaternion.identity);
-        PortalEntranceMangager entranceManager = entranceObj.GetComponent<PortalEntranceMangager>();
-        if (entranceManager != null)
-        {
-            entranceManager.ActionAnimator();
-        }
-        else
-        {
-            Debug.LogError("PortalEntranceMangager is missing on Portal Entrance prefab!");
-        }
+    //private void CreatePortals(Vector3 obstaclePos)
+    //{
+    //    Vector3 portalEntrancePos = obstaclePos - Vector3.right * portalOffset;
+    //    Vector3 portalExitPos = obstaclePos + Vector3.right * portalOffset;
 
-        // Instantiate Portal Exit
-        GameObject exitObj = Instantiate(portalExitPrefab, portalExitPos, Quaternion.identity);
-        PortalExitManager exitManager = exitObj.GetComponent<PortalExitManager>();
-        if (exitManager != null)
-        {
-            exitManager.ActionAnimator();
-        }
-        else
-        {
-            Debug.LogError("PortalExitManager is missing on Portal Exit prefab!");
-        }
-    }
+    //    GameObject entranceObj = Instantiate(portalEntrancePrefab, portalEntrancePos, Quaternion.identity);
+    //    portalEntranceMangager = entranceObj.GetComponent<PortalEntranceMangager>();
+    //    if (portalEntranceMangager != null)
+    //    {
+    //        portalEntranceMangager.ActionAnimator();
+    //    }
 
+    //    GameObject exitObj = Instantiate(portalExitPrefab, portalExitPos, Quaternion.identity);
+    //    portalExitManager = exitObj.GetComponent<PortalExitManager>();
+    //    if (portalExitManager != null)
+    //    {
+    //        portalExitManager.ActionAnimator();
+    //    }
+    //}
+
+    // Code cũ
+    //private void CheckObstacleDistance()
+    //{
+    //    GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+
+    //    foreach (GameObject obstacle in obstacles)
+    //    {
+    //        float distance = Vector3.Distance(transform.position, obstacle.transform.position);
+
+    //        if (distance <= portalOffset)
+    //        {
+    //            CreatePortals(obstacle.transform.position);
+    //            Destroy(gameObject);
+    //            break;
+    //        }
+    //    }
+    //}
+
+    //private void CreatePortals(Vector3 obstaclePos)
+    //{
+    //    Vector3 portalEntrancePos = obstaclePos - Vector3.right * portalOffset;
+    //    Vector3 portalExitPos = obstaclePos + Vector3.right * portalOffset;
+
+    //    GameObject entranceObj = Instantiate(portalEntrancePrefab, portalEntrancePos, Quaternion.identity);
+    //    portalEntranceMangager = entranceObj.GetComponent<PortalEntranceMangager>();
+    //    if (portalEntranceMangager != null)
+    //    {
+    //        portalEntranceMangager.ActionAnimator();
+    //    }
+
+    //    GameObject exitObj = Instantiate(portalExitPrefab, portalExitPos, Quaternion.identity);
+    //    portalExitManager = exitObj.GetComponent<PortalExitManager>();
+    //    if (portalExitManager != null)
+    //    {
+    //        portalExitManager.ActionAnimator();
+    //    }
+    //}
 }

@@ -41,38 +41,28 @@ public class ObstacleSpawner : MonoBehaviour
 
     private void SpawnObstacleGroup()
     {
-        if (obstacles == null || obstacles.Length == 0)
-        {
-            Debug.LogError("ObstacleSpawner: No obstacles assigned in the array!");
-            return;
-        }
+        if (obstacles == null || obstacles.Length == 0) return;
 
         int spawnCount = Random.value < doubleSpawnChance ? 2 : 1;
 
         GameObject obstacleGroup = null;
+
         if (spawnCount > 1)
         {
             obstacleGroup = new GameObject("ObstacleGroup"); // Tạo nhóm nếu có hơn 1 obstacle
+            obstacleGroup.tag = "ObstacleGroup";
         }
 
         for (int i = 0; i < spawnCount; i++)
         {
             int randomIndex = Random.Range(0, obstacles.Length);
 
-            if (obstacles[randomIndex] == null)
-            {
-                Debug.LogError($"ObstacleSpawner: obstacles[{randomIndex}] is null!");
-                continue;
-            }
+            if (obstacles[randomIndex] == null) continue;
 
             Vector3 spawnOffset = new Vector3(i * 1.5f, 0, 0);
             GameObject spawnedObstacle = Instantiate(obstacles[randomIndex], spawnPoint.position + spawnOffset, Quaternion.identity);
 
-            if (spawnedObstacle == null)
-            {
-                Debug.LogError("ObstacleSpawner: Failed to instantiate obstacle!");
-                continue;
-            }
+            if (spawnedObstacle == null) continue;
 
             if (obstacleGroup != null)
             {
