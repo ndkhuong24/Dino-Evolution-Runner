@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class KeyManager : MonoBehaviour
 {
     [Header("KeySetting")]
-    public string keyName; // Tên phím (Q, W, E, ...)
+    public string keyName;
     private CanvasGroup keyCanvasGroup;
     private CanvasGroup skillCanvasGroup;
     private Image skillIconImage;
@@ -20,7 +20,7 @@ public class KeyManager : MonoBehaviour
     private RifleGunController rifleGunController;
     private PortalGunController portalGunController;
 
-    private bool isStealthActive = false; // Biến kiểm tra kỹ năng StealthSkill có đang hoạt động không
+    private bool isStealthActive = false;
     private GameObject player;
     private Collider2D playerCollider;
 
@@ -45,8 +45,7 @@ public class KeyManager : MonoBehaviour
     internal void SetSkill(Skill skill)
     {
         assignedSkill = skill;
-        currentAmmo = skill.skillCost; // Đặt số lần sử dụng ban đầu
-
+        currentAmmo = skill.skillCost; 
         keyCanvasGroup.alpha = 1f;
         skillCanvasGroup.alpha = 1f;
         skillIconImage.sprite = skill.icon;
@@ -106,7 +105,7 @@ public class KeyManager : MonoBehaviour
 
     private IEnumerator ActivateStealthSkill()
     {
-        isStealthActive = true; // Kích hoạt trạng thái tàng hình
+        isStealthActive = true;
         float skillDuration = 6f;
         float elapsedTime = 0f;
 

@@ -9,12 +9,12 @@ public class PortalGunController : MonoBehaviour
 
     public void ActivateWeapon()
     {
-        gameObject.SetActive(true);  // ✅ Bật PortalGun
+        gameObject.SetActive(true);  
     }
 
     public void DeactivateWeapon()
     {
-        gameObject.SetActive(false); // ✅ Tắt PortalGun
+        gameObject.SetActive(false); 
     }
 
     internal void FireAmmo()

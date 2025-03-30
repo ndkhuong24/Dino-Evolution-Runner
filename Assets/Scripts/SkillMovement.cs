@@ -2,17 +2,13 @@
 
 public class SkillMovement : MonoBehaviour
 {
-    public float speed = 4f; // Tốc độ di chuyển của skill
+    public float speed = 4f; 
 
     void Update()
     {
         transform.position += Vector3.left * speed * Time.deltaTime;
 
-        // Nếu Skill đi quá giới hạn bên trái, tự hủy
-        if (transform.position.x < -10f) // Giả sử -10f là giới hạn bên trái
-        {
-            Destroy(gameObject);
-        }
+        if (transform.position.x < -10f) Destroy(gameObject);
     }
 
 }

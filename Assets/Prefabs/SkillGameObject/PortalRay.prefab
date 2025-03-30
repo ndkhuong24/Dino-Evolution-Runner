@@ -106,7 +106,7 @@ MonoBehaviour:
   speed: 15
   portalEntrancePrefab: {fileID: 4057311870346026009, guid: 62148f82baa0c27478d984dbf770da4d, type: 3}
   portalExitPrefab: {fileID: 8719152051207652326, guid: ef534ae67d78510439520a97d0dc26e2, type: 3}
-  portalOffset: 1.5
+  portalOffset: 1.2
 --- !u!60 &7857173044910832879
 PolygonCollider2D:
   m_ObjectHideFlags: 0

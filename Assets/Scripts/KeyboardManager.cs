@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class KeyboardManager : MonoBehaviour
 {
-    private List<KeyManager> keys = new List<KeyManager>(); // Danh sách các phím có thể gán skill
-    private Dictionary<string, KeyManager> keyDictionary = new Dictionary<string, KeyManager>(); // Dễ dàng truy xuất phím theo tên
+    private List<KeyManager> keys = new List<KeyManager>(); 
+    private Dictionary<string, KeyManager> keyDictionary = new Dictionary<string, KeyManager>(); 
     private KeyManager keyManager;
+    private DinoController dinoController;
 
     private void Awake()
     {
@@ -17,6 +18,8 @@ public class KeyboardManager : MonoBehaviour
         {
             keyDictionary[key.keyName] = key;
         }
+
+        dinoController = Object.FindFirstObjectByType<DinoController>();
     }
 
     private void Update()
@@ -32,7 +35,10 @@ public class KeyboardManager : MonoBehaviour
             {
                 if (keyDictionary[key].HasSkill())
                 {
-                    keyDictionary[key].ActivateSkill();
+                    if (!dinoController.isInPortal)
+                    {
+                        keyDictionary[key].ActivateSkill();
+                    }
                 }
             }
         }

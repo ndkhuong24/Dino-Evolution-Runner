@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     private int bestTime = 0;
 
     [Header("Speed Settings")]
-    public float globalSpeed = 5f;  // ✅ Đồng bộ tốc độ nền & chướng ngại vật
+    public float globalSpeed = 5f;  
     public float speedIncreaseRate = 0.15f;
     private float maxSpeed = 15f;
 
@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        globalSpeed = 5f;  // ✅ Reset tốc độ khi restart
+        globalSpeed = 5f;  
         timeElapsed = 0f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (GameObject ground in grounds)
         {
-            ground.transform.position += Vector3.left * globalSpeed * Time.deltaTime;  // ✅ Dùng globalSpeed để đồng bộ
+            ground.transform.position += Vector3.left * globalSpeed * Time.deltaTime; 
 
             if (ground.transform.position.x <= -groundWidth)
             {

@@ -39,7 +39,7 @@ public class RifleGunController : MonoBehaviour
 
     private IEnumerator SpawnBulletAfterFrame()
     {
-        yield return new WaitForEndOfFrame(); // Đợi đến cuối frame để vị trí firePoint ổn định
+        yield return new WaitForEndOfFrame();
         Instantiate(ammoPrefab, firePoint.position, firePoint.rotation);
     }
 

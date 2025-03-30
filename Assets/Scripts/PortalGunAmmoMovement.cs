@@ -5,16 +5,12 @@ public class PortalGunAmmoMovement : MonoBehaviour
 {
     public float speed = 15f;
     private Animator animator;
-    private float destroyBoundaryX; // Giới hạn để hủy đạn khi ra khỏi màn hình
+    private float destroyBoundaryX;
 
     [Header("Portal Settings")]
-    public GameObject portalEntrancePrefab; // Prefab của cổng vào
-    public GameObject portalExitPrefab; // Prefab của cổng ra
-    public float portalOffset = 1.5f; // Khoảng cách giữa cổng và vật cản
-    public float portalOffsetGroup = 2.5f; // Khoảng cách giữa cổng và nhóm vật cản
-
-    private PortalEntranceMangager portalEntranceMangager;
-    private PortalExitManager portalExitManager;
+    public GameObject portalEntrancePrefab;
+    public GameObject portalExitPrefab;
+    public float portalOffset = 1.2f;
 
     private void Awake()
     {
@@ -24,7 +20,6 @@ public class PortalGunAmmoMovement : MonoBehaviour
     private void Start()
     {
         animator.SetTrigger("isShooting");
-
         destroyBoundaryX = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, 0)).x + 2f;
     }
 
@@ -32,142 +27,56 @@ public class PortalGunAmmoMovement : MonoBehaviour
     {
         transform.position += Vector3.right * speed * Time.fixedDeltaTime;
 
-        if (transform.position.x > destroyBoundaryX)
-        {
-            Destroy(gameObject);
-        }
-
-        //CheckObstacleDistance();
+        if (transform.position.x > destroyBoundaryX) Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Transform parentGroup = collision.transform.parent;
+        GameObject targetObject = collision.transform.parent?.CompareTag("ObstacleGroup") ?? false
+            ? collision.transform.parent.gameObject
+            : collision.gameObject;
 
-        //Kiểm tra xem có Group hay không
-        if (parentGroup != null && parentGroup.CompareTag("ObstacleGroup"))
+        if (targetObject.CompareTag("Obstacle") || targetObject.CompareTag("ObstacleGroup"))
         {
-            CreatePortals(parentGroup);
-            Destroy(gameObject);
-        }
-        else if (collision.CompareTag("Obstacle"))
-        {
-            CreatePortals(collision.transform);
+            CreatePortals(targetObject);
             Destroy(gameObject);
         }
     }
 
-    private void CreatePortals(Transform target)
+    private void CreatePortals(GameObject obstacle)
     {
-        Vector3 portalEntrancePos;
-        Vector3 portalExitPos;
+        (float minX, float maxX, float referenceY) = GetObstacleBounds(obstacle);
 
-        if (target.CompareTag("ObstacleGroup"))
-        {
-            //Tìm vị trí trung tâm của Group
-            Bounds groupBounds = GetGroupBounds(target);
-            portalEntrancePos = groupBounds.center - Vector3.right * portalOffsetGroup;
-            portalExitPos = groupBounds.center + Vector3.right * portalOffsetGroup;
-        }
-        else
-        {
-            //Nếu chỉ có một Obstacle, đặt portal như cũ
-            portalEntrancePos = target.position - Vector3.right * portalOffset;
-            portalExitPos = target.position + Vector3.right * portalOffset;
-        }
+        Vector3 portalEntrancePos = new Vector3(minX - portalOffset, referenceY, 0);
+        Vector3 portalExitPos = new Vector3(maxX + portalOffset, referenceY, 0);
 
-        //Tạo cổng vào
-        GameObject entranceObj = Instantiate(portalEntrancePrefab, portalEntrancePos, Quaternion.identity);
-        portalEntranceMangager = entranceObj.GetComponent<PortalEntranceMangager>();
-        if (portalEntranceMangager != null) portalEntranceMangager.ActionAnimator();
+        Instantiate(portalEntrancePrefab, portalEntrancePos, Quaternion.identity)
+            ?.GetComponent<PortalEntranceMangager>()?.ActionAnimator();
 
-        //Tạo cổng ra
-        GameObject exitObj = Instantiate(portalExitPrefab, portalExitPos, Quaternion.identity);
-        portalExitManager = exitObj.GetComponent<PortalExitManager>();
-        if (portalExitManager != null) portalExitManager.ActionAnimator();
+        Instantiate(portalExitPrefab, portalExitPos, Quaternion.identity)
+            ?.GetComponent<PortalExitManager>()?.ActionAnimator();
     }
 
-    private Bounds GetGroupBounds(Transform target)
+    private (float, float, float) GetObstacleBounds(GameObject obstacle)
     {
-        Bounds bounds = new Bounds(target.position, Vector3.zero);
+        Collider2D[] colliders = obstacle.GetComponentsInChildren<Collider2D>();
 
-        foreach (Transform child in target)
+        if (colliders.Length == 0)
         {
-            Collider2D col = child.GetComponent<Collider2D>();
-            if (col != null)
-            {
-                bounds.Encapsulate(col.bounds);
-            }
+            float posX = obstacle.transform.position.x;
+            float posY = obstacle.transform.position.y;
+            return (posX, posX, posY);
         }
 
-        return bounds;
+        float minX = Mathf.Infinity, maxX = Mathf.NegativeInfinity;
+        float referenceY = colliders[0].bounds.center.y;
+
+        foreach (var col in colliders)
+        {
+            minX = Mathf.Min(minX, col.bounds.min.x);
+            maxX = Mathf.Max(maxX, col.bounds.max.x);
+        }
+
+        return (minX, maxX, referenceY);
     }
-
-    //Code mới
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("Obstacle") || collision.CompareTag("ObstacleGroup"))
-    //    {
-    //        CreatePortals(collision.transform.position);
-    //        Destroy(gameObject);
-    //    }
-    //}
-
-    //private void CreatePortals(Vector3 obstaclePos)
-    //{
-    //    Vector3 portalEntrancePos = obstaclePos - Vector3.right * portalOffset;
-    //    Vector3 portalExitPos = obstaclePos + Vector3.right * portalOffset;
-
-    //    GameObject entranceObj = Instantiate(portalEntrancePrefab, portalEntrancePos, Quaternion.identity);
-    //    portalEntranceMangager = entranceObj.GetComponent<PortalEntranceMangager>();
-    //    if (portalEntranceMangager != null)
-    //    {
-    //        portalEntranceMangager.ActionAnimator();
-    //    }
-
-    //    GameObject exitObj = Instantiate(portalExitPrefab, portalExitPos, Quaternion.identity);
-    //    portalExitManager = exitObj.GetComponent<PortalExitManager>();
-    //    if (portalExitManager != null)
-    //    {
-    //        portalExitManager.ActionAnimator();
-    //    }
-    //}
-
-    // Code cũ
-    //private void CheckObstacleDistance()
-    //{
-    //    GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
-
-    //    foreach (GameObject obstacle in obstacles)
-    //    {
-    //        float distance = Vector3.Distance(transform.position, obstacle.transform.position);
-
-    //        if (distance <= portalOffset)
-    //        {
-    //            CreatePortals(obstacle.transform.position);
-    //            Destroy(gameObject);
-    //            break;
-    //        }
-    //    }
-    //}
-
-    //private void CreatePortals(Vector3 obstaclePos)
-    //{
-    //    Vector3 portalEntrancePos = obstaclePos - Vector3.right * portalOffset;
-    //    Vector3 portalExitPos = obstaclePos + Vector3.right * portalOffset;
-
-    //    GameObject entranceObj = Instantiate(portalEntrancePrefab, portalEntrancePos, Quaternion.identity);
-    //    portalEntranceMangager = entranceObj.GetComponent<PortalEntranceMangager>();
-    //    if (portalEntranceMangager != null)
-    //    {
-    //        portalEntranceMangager.ActionAnimator();
-    //    }
-
-    //    GameObject exitObj = Instantiate(portalExitPrefab, portalExitPos, Quaternion.identity);
-    //    portalExitManager = exitObj.GetComponent<PortalExitManager>();
-    //    if (portalExitManager != null)
-    //    {
-    //        portalExitManager.ActionAnimator();
-    //    }
-    //}
 }

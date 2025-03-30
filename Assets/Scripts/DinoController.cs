@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class DinoController : MonoBehaviour
 {
@@ -11,7 +12,9 @@ public class DinoController : MonoBehaviour
     private bool isGrounded = true;
 
     [Header("Game Settings")]
-    public float gravityScale = 2.5f; 
+    public float gravityScale = 2.5f;
+
+    public bool isInPortal = false;
 
     void Start()
     {
@@ -23,9 +26,16 @@ public class DinoController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) Jump();
+        if (isInPortal) return;
+
+        HandleMovement();
 
         //anim.SetBool("isDashing", Input.GetKey(KeyCode.LeftShift) && isGrounded);
+    }
+
+    private void HandleMovement()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) Jump();
     }
 
     private void Jump()
@@ -49,12 +59,16 @@ public class DinoController : MonoBehaviour
         }
     }
 
-    // Bật-Tắt trọng lực khi đi qua portal
     public void SetGravity(bool enable)
     {
         if (enable)
-            rb.gravityScale = originalGravity; 
+            rb.gravityScale = originalGravity;
         else
             rb.gravityScale = 0f;
+    }
+
+    public void SetInPortal(bool state)
+    {
+        isInPortal = state;
     }
 }

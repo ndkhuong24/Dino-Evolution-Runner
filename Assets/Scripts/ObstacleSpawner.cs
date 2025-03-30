@@ -49,7 +49,7 @@ public class ObstacleSpawner : MonoBehaviour
 
         if (spawnCount > 1)
         {
-            obstacleGroup = new GameObject("ObstacleGroup"); // Tạo nhóm nếu có hơn 1 obstacle
+            obstacleGroup = new GameObject("ObstacleGroup");
             obstacleGroup.tag = "ObstacleGroup";
         }
 
@@ -66,7 +66,7 @@ public class ObstacleSpawner : MonoBehaviour
 
             if (obstacleGroup != null)
             {
-                spawnedObstacle.transform.parent = obstacleGroup.transform; // Chỉ gán parent nếu có group
+                spawnedObstacle.transform.parent = obstacleGroup.transform;
             }
         }
     }

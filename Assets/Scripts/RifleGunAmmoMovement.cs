@@ -2,13 +2,13 @@
 
 public class RifleGunAmmoMovement : MonoBehaviour
 {
-    public float speed = 15f; // Tốc độ di chuyển của đạn
+    public float speed = 15f; 
 
     void Update()
     {
         transform.position += Vector3.right * speed * Time.deltaTime;
 
-        if (transform.position.x > 10f) // ✅ Hủy đạn khi nó đi quá xa bên phải màn hình
+        if (transform.position.x > 10f) 
         {
             Destroy(gameObject);
         }
@@ -16,20 +16,20 @@ public class RifleGunAmmoMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Obstacle")) // Kiểm tra nếu va chạm với Obstacle
+        if (other.CompareTag("Obstacle")) 
         {
-            Transform parent = other.transform.parent; // Kiểm tra có parent không
+            Transform parent = other.transform.parent; 
 
             if (parent != null && parent.name == "ObstacleGroup")
             {
-                Destroy(parent.gameObject); // Nếu thuộc group, hủy toàn bộ group
+                Destroy(parent.gameObject); 
             }
             else
             {
-                Destroy(other.gameObject); // Nếu không thuộc group, chỉ hủy object
+                Destroy(other.gameObject); 
             }
 
-            Destroy(gameObject); // Hủy đạn
+            Destroy(gameObject); 
         }
     }
 }
