@@ -26,10 +26,8 @@ public class PortalExitManager : MonoBehaviour
 
             if (playerController != null && col != null)
             {
-                col.isTrigger = false;               
-                playerController.SetGravity(true);   
-                //collision.GetComponent<SpriteRenderer>().enabled = true;
-
+                col.isTrigger = false;
+                playerController.SetGravity(true);
                 playerController.SetInPortal(false);
 
                 // Hiện lại người chơi

@@ -45,7 +45,7 @@ public class KeyManager : MonoBehaviour
     internal void SetSkill(Skill skill)
     {
         assignedSkill = skill;
-        currentAmmo = skill.skillCost; 
+        currentAmmo = skill.skillCost;
         keyCanvasGroup.alpha = 1f;
         skillCanvasGroup.alpha = 1f;
         skillIconImage.sprite = skill.icon;
@@ -146,6 +146,11 @@ public class KeyManager : MonoBehaviour
 
             if (sr != null) sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.5f);
             if (col != null) col.isTrigger = true;
+
+            if (obstacle.layer != LayerMask.NameToLayer("StealthObstacle"))
+            {
+                obstacle.layer = LayerMask.NameToLayer("StealthObstacle");
+            }
         }
     }
 
@@ -158,6 +163,11 @@ public class KeyManager : MonoBehaviour
 
             if (sr != null) sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
             if (col != null) col.isTrigger = false;
+
+            if (obstacle.layer == LayerMask.NameToLayer("StealthObstacle"))
+            {
+                obstacle.layer = LayerMask.NameToLayer("Default");
+            }
         }
     }
 

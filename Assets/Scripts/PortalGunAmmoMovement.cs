@@ -41,6 +41,11 @@ public class PortalGunAmmoMovement : MonoBehaviour
             CreatePortals(targetObject);
             Destroy(gameObject);
         }
+        //else if (targetObject.name == "PortalEntrance")
+        //{
+        //    // Dịch chuyển đạn đến cổng ra
+        //    transform.position = new Vector3(targetObject.transform.position.x + 2f, targetObject.transform.position.y, targetObject.transform.position.z);
+        //}
     }
 
     private void CreatePortals(GameObject obstacle)

@@ -2,13 +2,13 @@
 
 public class RifleGunAmmoMovement : MonoBehaviour
 {
-    public float speed = 15f; 
+    public float speed = 15f;
 
     void Update()
     {
         transform.position += Vector3.right * speed * Time.deltaTime;
 
-        if (transform.position.x > 10f) 
+        if (transform.position.x > 10f)
         {
             Destroy(gameObject);
         }
@@ -16,20 +16,20 @@ public class RifleGunAmmoMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Obstacle")) 
+        if (other.CompareTag("Obstacle"))
         {
-            Transform parent = other.transform.parent; 
+            Transform parent = other.transform.parent;
 
             if (parent != null && parent.name == "ObstacleGroup")
             {
-                Destroy(parent.gameObject); 
+                Destroy(parent.gameObject);
             }
             else
             {
-                Destroy(other.gameObject); 
+                Destroy(other.gameObject);
             }
 
-            Destroy(gameObject); 
+            Destroy(gameObject);
         }
     }
 }
