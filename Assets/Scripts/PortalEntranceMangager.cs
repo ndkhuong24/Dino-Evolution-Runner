@@ -5,6 +5,8 @@ public class PortalEntranceMangager : MonoBehaviour
     private Animator animator;
     private GameManager gameManager;
 
+    [HideInInspector] public Transform linkedPortalExit;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -26,10 +28,9 @@ public class PortalEntranceMangager : MonoBehaviour
 
             if (playerController != null && col != null)
             {
-                playerController.SetGravity(false); 
+                playerController.SetGravity(false);
                 col.isTrigger = true;
                 playerController.SetInPortal(true);
-                //collision.GetComponent<SpriteRenderer>().enabled = false;
 
                 SpriteRenderer[] renderers = collision.GetComponentsInChildren<SpriteRenderer>();
                 foreach (var renderer in renderers)
@@ -37,6 +38,11 @@ public class PortalEntranceMangager : MonoBehaviour
                     renderer.enabled = false;
                 }
             }
+        }
+        else if (collision.CompareTag("Ammo") && linkedPortalExit != null)
+        {
+            // Di chuyển Ammo sang đúng vị trí của Portal Exit mà không tăng tốc
+            collision.transform.position = linkedPortalExit.position + Vector3.right * 0.5f;
         }
     }
 

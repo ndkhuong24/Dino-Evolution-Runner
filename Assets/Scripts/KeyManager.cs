@@ -15,6 +15,7 @@ public class KeyManager : MonoBehaviour
     public TextMeshProUGUI ammoText;
     private int currentAmmo;
     private Skill assignedSkill = null;
+    public TextMeshProUGUI stealthTime;
 
     [Header("SkillSetting")]
     private RifleGunController rifleGunController;
@@ -23,6 +24,7 @@ public class KeyManager : MonoBehaviour
     private bool isStealthActive = false;
     private GameObject player;
     private Collider2D playerCollider;
+    private Text StealthTimer;
 
     private void Awake()
     {
@@ -106,35 +108,61 @@ public class KeyManager : MonoBehaviour
     private IEnumerator ActivateStealthSkill()
     {
         isStealthActive = true;
-        float skillDuration = 6f;
-        float elapsedTime = 0f;
+        float skillDuration = 10f;
+        float remaining = skillDuration;
 
-        while (elapsedTime < skillDuration)
+        while (remaining > 0)
         {
             ApplyStealthEffect();
+            stealthTime.text = $"{remaining:F1}s";
             yield return new WaitForSeconds(0.1f);
-            elapsedTime += 0.1f;
+            remaining -= 0.1f;
         }
 
+        stealthTime.text = "";
         isStealthActive = false;
 
+        //Đợi cho người chơi ra khỏi vật cản
         while (IsPlayerInsideObstacle() || IsObstacleInFront())
         {
             yield return new WaitForSeconds(0.5f);
-            elapsedTime += 0.5f;
         }
 
         ResetStealthEffect();
     }
 
+    //private IEnumerator ActivateStealthSkill()
+    //{
+    //    isStealthActive = true;
+    //    float skillDuration = 6f;
+    //    float elapsedTime = 0f;
+
+    //    while (elapsedTime < skillDuration)
+    //    {
+    //        ApplyStealthEffect();
+    //        yield return new WaitForSeconds(0.1f);
+    //        elapsedTime += 0.1f;
+    //    }
+
+    //    isStealthActive = false;
+
+    //    while (IsPlayerInsideObstacle() || IsObstacleInFront())
+    //    {
+    //        yield return new WaitForSeconds(0.5f);
+    //        elapsedTime += 0.5f;
+    //    }
+
+    //    ResetStealthEffect();
+    //}
+
     private bool IsObstacleInFront()
     {
-        return Physics2D.Raycast(player.transform.position, Vector2.right, 1f, LayerMask.GetMask("Obstacle"));
+        return Physics2D.Raycast(player.transform.position, Vector2.right, 1f, LayerMask.GetMask("StealthObstacle"));
     }
 
     private bool IsPlayerInsideObstacle()
     {
-        return Physics2D.OverlapBox(player.transform.position, new Vector2(1f, 1f), 0f, LayerMask.GetMask("Obstacle"));
+        return Physics2D.OverlapBox(player.transform.position, new Vector2(1f, 1f), 0f, LayerMask.GetMask("StealthObstacle"));
     }
 
     private void ApplyStealthEffect()

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class ObstacleSpawner : MonoBehaviour
 {
@@ -45,13 +46,7 @@ public class ObstacleSpawner : MonoBehaviour
 
         int spawnCount = Random.value < doubleSpawnChance ? 2 : 1;
 
-        GameObject obstacleGroup = null;
-
-        if (spawnCount > 1)
-        {
-            obstacleGroup = new GameObject("ObstacleGroup");
-            obstacleGroup.tag = "ObstacleGroup";
-        }
+        List<GameObject> spawnedObstacles = new List<GameObject>();
 
         for (int i = 0; i < spawnCount; i++)
         {
@@ -60,16 +55,59 @@ public class ObstacleSpawner : MonoBehaviour
             if (obstacles[randomIndex] == null) continue;
 
             Vector3 spawnOffset = new Vector3(i * 1.5f, 0, 0);
+
             GameObject spawnedObstacle = Instantiate(obstacles[randomIndex], spawnPoint.position + spawnOffset, Quaternion.identity);
 
-            if (spawnedObstacle == null) continue;
-
-            if (obstacleGroup != null)
+            if (spawnedObstacle != null)
             {
-                spawnedObstacle.transform.parent = obstacleGroup.transform;
+                spawnedObstacles.Add(spawnedObstacle);
+            }
+        }
+
+        // Nếu có nhiều hơn 1 thì gộp vào nhóm
+        if (spawnedObstacles.Count > 1)
+        {
+            GameObject obstacleGroup = new GameObject("ObstacleGroup");
+            obstacleGroup.tag = "ObstacleGroup";
+
+            foreach (var obs in spawnedObstacles)
+            {
+                obs.transform.parent = obstacleGroup.transform;
             }
         }
     }
+
+    //private void SpawnObstacleGroup()
+    //{
+    //    if (obstacles == null || obstacles.Length == 0) return;
+
+    //    int spawnCount = Random.value < doubleSpawnChance ? 2 : 1;
+
+    //    GameObject obstacleGroup = null;
+
+    //    if (spawnCount > 1)
+    //    {
+    //        obstacleGroup = new GameObject("ObstacleGroup");
+    //        obstacleGroup.tag = "ObstacleGroup";
+    //    }
+
+    //    for (int i = 0; i < spawnCount; i++)
+    //    {
+    //        int randomIndex = Random.Range(0, obstacles.Length);
+
+    //        if (obstacles[randomIndex] == null) continue;
+
+    //        Vector3 spawnOffset = new Vector3(i * 1.5f, 0, 0);
+    //        GameObject spawnedObstacle = Instantiate(obstacles[randomIndex], spawnPoint.position + spawnOffset, Quaternion.identity);
+
+    //        if (spawnedObstacle == null) continue;
+
+    //        if (obstacleGroup != null)
+    //        {
+    //            spawnedObstacle.transform.parent = obstacleGroup.transform;
+    //        }
+    //    }
+    //}
 
     private void SetNextSpawnTime()
     {

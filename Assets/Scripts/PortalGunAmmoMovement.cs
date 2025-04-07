@@ -41,11 +41,6 @@ public class PortalGunAmmoMovement : MonoBehaviour
             CreatePortals(targetObject);
             Destroy(gameObject);
         }
-        //else if (targetObject.name == "PortalEntrance")
-        //{
-        //    // Dịch chuyển đạn đến cổng ra
-        //    transform.position = new Vector3(targetObject.transform.position.x + 2f, targetObject.transform.position.y, targetObject.transform.position.z);
-        //}
     }
 
     private void CreatePortals(GameObject obstacle)
@@ -55,11 +50,20 @@ public class PortalGunAmmoMovement : MonoBehaviour
         Vector3 portalEntrancePos = new Vector3(minX - portalOffset, referenceY, 0);
         Vector3 portalExitPos = new Vector3(maxX + portalOffset, referenceY, 0);
 
-        Instantiate(portalEntrancePrefab, portalEntrancePos, Quaternion.identity)
-            ?.GetComponent<PortalEntranceMangager>()?.ActionAnimator();
+        GameObject portalEntrance = Instantiate(portalEntrancePrefab, portalEntrancePos, Quaternion.identity);
+        GameObject portalExit = Instantiate(portalExitPrefab, portalExitPos, Quaternion.identity);
 
-        Instantiate(portalExitPrefab, portalExitPos, Quaternion.identity)
-            ?.GetComponent<PortalExitManager>()?.ActionAnimator();
+        // Liên kết portal entrance với portal exit
+        PortalEntranceMangager entranceManager = portalEntrance.GetComponent<PortalEntranceMangager>();
+        PortalExitManager exitManager = portalExit.GetComponent<PortalExitManager>();
+
+        entranceManager.ActionAnimator();
+        exitManager.ActionAnimator();
+
+        if (entranceManager != null && exitManager != null)
+        {
+            entranceManager.linkedPortalExit = exitManager.transform;
+        }
     }
 
     private (float, float, float) GetObstacleBounds(GameObject obstacle)
