@@ -41,6 +41,12 @@ public class GameManager : MonoBehaviour
             MoveGround();
             globalSpeed = Mathf.Min(globalSpeed + Time.deltaTime * speedIncreaseRate, maxSpeed);  // ✅ Đồng bộ tăng tốc
         }
+
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            RestartGame();
+        }
+
     }
 
     private void InitializeGame()

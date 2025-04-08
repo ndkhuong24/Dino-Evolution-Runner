@@ -126,34 +126,11 @@ public class KeyManager : MonoBehaviour
         while (IsPlayerInsideObstacle() || IsObstacleInFront())
         {
             yield return new WaitForSeconds(0.5f);
+          //elapsedTime += 0.5f;
         }
 
         ResetStealthEffect();
     }
-
-    //private IEnumerator ActivateStealthSkill()
-    //{
-    //    isStealthActive = true;
-    //    float skillDuration = 6f;
-    //    float elapsedTime = 0f;
-
-    //    while (elapsedTime < skillDuration)
-    //    {
-    //        ApplyStealthEffect();
-    //        yield return new WaitForSeconds(0.1f);
-    //        elapsedTime += 0.1f;
-    //    }
-
-    //    isStealthActive = false;
-
-    //    while (IsPlayerInsideObstacle() || IsObstacleInFront())
-    //    {
-    //        yield return new WaitForSeconds(0.5f);
-    //        elapsedTime += 0.5f;
-    //    }
-
-    //    ResetStealthEffect();
-    //}
 
     private bool IsObstacleInFront()
     {
