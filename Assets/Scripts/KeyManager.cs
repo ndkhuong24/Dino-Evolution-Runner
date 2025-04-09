@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +21,12 @@ public class KeyManager : MonoBehaviour
     private PortalGunController portalGunController;
 
     private bool isStealthActive = false;
+    private bool waitingToReset = false;
+    private bool stealthEffectApplied = false;
+
+    private float stealthTimer = 0f;
+    private float skillDuration = 10f;
+
     private GameObject player;
     private Collider2D playerCollider;
 
@@ -38,6 +43,41 @@ public class KeyManager : MonoBehaviour
         {
             rifleGunController = player.transform.Find("RifleGun")?.GetComponent<RifleGunController>();
             portalGunController = player.transform.Find("PortalGun")?.GetComponent<PortalGunController>();
+        }
+    }
+
+    private void Update()
+    {
+        if (isStealthActive)
+        {
+            if (!stealthEffectApplied)
+            {
+                ApplyStealthEffect();
+                stealthEffectApplied = true;
+            }
+
+            if (stealthTimer > 0f)
+            {
+                ApplyStealthEffect(); // Giữ hiệu ứng liên tục nếu cần
+                stealthTimer -= Time.deltaTime;
+                stealthTime.text = $"{stealthTimer:F1}s";
+            }
+            else
+            {
+                stealthTime.text = "";
+                isStealthActive = false;
+                waitingToReset = true;
+            }
+        }
+        else if (waitingToReset)
+        {
+            if (!IsPlayerInsideObstacle() && !IsObstacleInFront())
+            {
+                ResetStealthEffect();
+                waitingToReset = false;
+                stealthEffectApplied = false;
+                ResetSkill(); // Reset khi hoàn tất
+            }
         }
     }
 
@@ -76,11 +116,8 @@ public class KeyManager : MonoBehaviour
                 }
                 break;
             case "StealthSkill":
-                if (!isStealthActive)
-                {
-                    StartCoroutine(ActivateStealthSkill());
-                    ResetSkill();
-                }
+                ActivateStealthSkill();
+                HideSkillDisplay(); // Ẩn giao diện ngay khi kích hoạt
                 break;
         }
     }
@@ -104,31 +141,28 @@ public class KeyManager : MonoBehaviour
         ammoText.text = currentAmmo > 0 ? $"Ammo: {currentAmmo}" : "";
     }
 
-    private IEnumerator ActivateStealthSkill()
+    private void ActivateStealthSkill()
     {
+        // Reset trạng thái để chạy lần mới
         isStealthActive = true;
-        float skillDuration = 10f;
-        float remaining = skillDuration;
+        stealthTimer = skillDuration; // Reset thời gian về 10f
+        stealthTime.text = $"{stealthTimer:F1}s"; // Cập nhật UI ngay lập tức
+        waitingToReset = false; // Hủy trạng thái đợi nếu có
 
-        while (remaining > 0)
+        // Nếu hiệu ứng đã áp dụng trước đó, không cần áp dụng lại
+        if (!stealthEffectApplied)
         {
             ApplyStealthEffect();
-            stealthTime.text = $"{remaining:F1}s";
-            yield return new WaitForSeconds(0.1f);
-            remaining -= 0.1f;
+            stealthEffectApplied = true;
         }
+    }
 
-        stealthTime.text = "";
-        isStealthActive = false;
-
-        //Đợi cho người chơi ra khỏi vật cản
-        while (IsPlayerInsideObstacle() || IsObstacleInFront())
-        {
-            yield return new WaitForSeconds(0.5f);
-            //elapsedTime += 0.5f;
-        }
-
-        ResetStealthEffect();
+    private void HideSkillDisplay()
+    {
+        // Chỉ ẩn giao diện skill, không reset toàn bộ
+        keyCanvasGroup.alpha = 0.3f;
+        skillCanvasGroup.alpha = 0f;
+        skillIconImage.sprite = null;
     }
 
     private bool IsObstacleInFront()
