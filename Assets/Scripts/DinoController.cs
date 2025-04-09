@@ -5,10 +5,10 @@ public class DinoController : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Animator anim;
-    private float originalGravity; // Lưu trọng lực ban đầu
+    private float originalGravity;
 
     [Header("Jump Settings")]
-    public float jumpForce = 12.5f; // Lực nhảy tối ưu
+    public float jumpForce = 12.5f;
     private bool isGrounded = true;
 
     [Header("Game Settings")]
@@ -20,8 +20,11 @@ public class DinoController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        originalGravity = gravityScale; // Lưu trọng lực ban đầu
+
+        originalGravity = gravityScale;
         rb.gravityScale = gravityScale;
+
+        ResetState();
     }
 
     void Update()
@@ -29,19 +32,19 @@ public class DinoController : MonoBehaviour
         if (isInPortal) return;
 
         HandleMovement();
-
-        //anim.SetBool("isDashing", Input.GetKey(KeyCode.LeftShift) && isGrounded);
     }
 
     private void HandleMovement()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) Jump();
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true) Jump();
     }
 
     private void Jump()
     {
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        if (Mathf.Abs(rb.linearVelocity.y) > 0.01f) return;
+
         isGrounded = false;
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         anim.SetBool("isJumping", true);
     }
 
@@ -70,5 +73,14 @@ public class DinoController : MonoBehaviour
     public void SetInPortal(bool state)
     {
         isInPortal = state;
+    }
+
+    private void ResetState()
+    {
+        isGrounded = true;
+        rb.linearVelocity = Vector2.zero;
+        anim.SetBool("isJumping", false);
+        rb.gravityScale = originalGravity;
+        isInPortal = false;
     }
 }

@@ -18,7 +18,7 @@ public class ObstacleMover : MonoBehaviour
     {
         if (gameManager == null || gameManager.globalSpeed <= 0) return;
 
-        transform.position += Vector3.left * gameManager.globalSpeed * Time.deltaTime;  
+        transform.position += Vector3.left * gameManager.globalSpeed * Time.deltaTime;
 
         if (transform.position.x < -10f)
         {

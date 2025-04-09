@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class KeyboardManager : MonoBehaviour
 {
-    private List<KeyManager> keys = new List<KeyManager>(); 
-    private Dictionary<string, KeyManager> keyDictionary = new Dictionary<string, KeyManager>(); 
+    private List<KeyManager> keys = new List<KeyManager>();
+    private Dictionary<string, KeyManager> keyDictionary = new Dictionary<string, KeyManager>();
     private KeyManager keyManager;
     private DinoController dinoController;
 

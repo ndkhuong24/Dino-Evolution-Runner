@@ -77,38 +77,6 @@ public class ObstacleSpawner : MonoBehaviour
         }
     }
 
-    //private void SpawnObstacleGroup()
-    //{
-    //    if (obstacles == null || obstacles.Length == 0) return;
-
-    //    int spawnCount = Random.value < doubleSpawnChance ? 2 : 1;
-
-    //    GameObject obstacleGroup = null;
-
-    //    if (spawnCount > 1)
-    //    {
-    //        obstacleGroup = new GameObject("ObstacleGroup");
-    //        obstacleGroup.tag = "ObstacleGroup";
-    //    }
-
-    //    for (int i = 0; i < spawnCount; i++)
-    //    {
-    //        int randomIndex = Random.Range(0, obstacles.Length);
-
-    //        if (obstacles[randomIndex] == null) continue;
-
-    //        Vector3 spawnOffset = new Vector3(i * 1.5f, 0, 0);
-    //        GameObject spawnedObstacle = Instantiate(obstacles[randomIndex], spawnPoint.position + spawnOffset, Quaternion.identity);
-
-    //        if (spawnedObstacle == null) continue;
-
-    //        if (obstacleGroup != null)
-    //        {
-    //            spawnedObstacle.transform.parent = obstacleGroup.transform;
-    //        }
-    //    }
-    //}
-
     private void SetNextSpawnTime()
     {
         nextSpawnTime = Time.time + Random.Range(currentMinSpawnTime, currentMaxSpawnTime);

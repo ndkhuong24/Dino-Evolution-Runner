@@ -2,7 +2,7 @@
 
 public class SkillMovement : MonoBehaviour
 {
-    public float speed = 4f; 
+    public float speed = 4f;
 
     void Update()
     {
@@ -10,5 +10,4 @@ public class SkillMovement : MonoBehaviour
 
         if (transform.position.x < -10f) Destroy(gameObject);
     }
-
 }

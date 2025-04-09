@@ -24,7 +24,6 @@ public class KeyManager : MonoBehaviour
     private bool isStealthActive = false;
     private GameObject player;
     private Collider2D playerCollider;
-    private Text StealthTimer;
 
     private void Awake()
     {
@@ -126,7 +125,7 @@ public class KeyManager : MonoBehaviour
         while (IsPlayerInsideObstacle() || IsObstacleInFront())
         {
             yield return new WaitForSeconds(0.5f);
-          //elapsedTime += 0.5f;
+            //elapsedTime += 0.5f;
         }
 
         ResetStealthEffect();

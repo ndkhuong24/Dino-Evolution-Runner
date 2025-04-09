@@ -42,5 +42,4 @@ public class RifleGunController : MonoBehaviour
         yield return new WaitForEndOfFrame();
         Instantiate(ammoPrefab, firePoint.position, firePoint.rotation);
     }
-
 }
