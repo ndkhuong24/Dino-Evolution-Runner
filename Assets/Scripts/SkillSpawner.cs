@@ -30,7 +30,12 @@ public class SkillSpawner : MonoBehaviour
 
             if (skillToSpawn.skillPrefab)
             {
-                GameObject spawnedSkill = Instantiate(skillToSpawn.skillPrefab, spawnPoint.position, Quaternion.identity);
+                //GameObject spawnedSkill = Instantiate(skillToSpawn.skillPrefab, spawnPoint.position, Quaternion.identity);
+
+                GameObject spawnedSkill = ObjectPool.Instance.GetObject(skillToSpawn.skillPrefab);
+                spawnedSkill.transform.position = spawnPoint.position;
+                spawnedSkill.transform.rotation = Quaternion.identity;
+
                 SkillIcon skillIcon = spawnedSkill.GetComponent<SkillIcon>();
 
                 if (skillIcon != null) skillIcon.SetSkillDataToSpawn(skillToSpawn);

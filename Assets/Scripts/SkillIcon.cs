@@ -23,7 +23,8 @@ public class SkillIcon : MonoBehaviour
             if (skillData != null)
             {
                 SetUpSkillToKeyboard();
-                Destroy(gameObject);
+                //Destroy(gameObject);
+                ObjectPool.Instance.ReturnObject(gameObject);
             }
         }
     }

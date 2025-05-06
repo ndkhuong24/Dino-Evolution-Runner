@@ -244,5 +244,4 @@ public class KeyManager : MonoBehaviour
         stealthTimer = 0f;
         stealthTime.text = "";
     }
-
 }

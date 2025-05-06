@@ -12,7 +12,8 @@ public class RifleGunAmmoMovement : MonoBehaviour
 
         if (transform.position.x > 10f)
         {
-            Destroy(gameObject);
+            ObjectPool.Instance.ReturnObject(gameObject);
+            //Destroy(gameObject);
         }
     }
 
@@ -47,7 +48,8 @@ public class RifleGunAmmoMovement : MonoBehaviour
                 ObjectPool.Instance.ReturnObject(other.gameObject);
             }
 
-            Destroy(gameObject);
+            ObjectPool.Instance.ReturnObject(gameObject);
+            //Destroy(gameObject);
         }
     }
 

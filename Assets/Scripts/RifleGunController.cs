@@ -40,6 +40,15 @@ public class RifleGunController : MonoBehaviour
     private IEnumerator SpawnBulletAfterFrame()
     {
         yield return new WaitForEndOfFrame();
-        Instantiate(ammoPrefab, firePoint.position, firePoint.rotation);
+
+        GameObject ammo = ObjectPool.Instance.GetObject(ammoPrefab);
+        ammo.transform.position = firePoint.position;
+        ammo.transform.rotation = firePoint.rotation;
     }
+
+    //private IEnumerator SpawnBulletAfterFrame()
+    //{
+    //    yield return new WaitForEndOfFrame();
+    //    Instantiate(ammoPrefab, firePoint.position, firePoint.rotation);
+    //}
 }

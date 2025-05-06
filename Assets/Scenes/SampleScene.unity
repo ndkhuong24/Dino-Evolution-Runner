@@ -6111,6 +6111,14 @@ MonoBehaviour:
   poolObjects:
   - prefab: {fileID: 7429682804436719149, guid: 0ee20c8d58599e54d8d63e404ed3c248, type: 3}
     initialSize: 10
+  - prefab: {fileID: 3298562785772556281, guid: d8b1cc510fd97944fbd08c1755c5349a, type: 3}
+    initialSize: 20
+  - prefab: {fileID: 1717251771798682735, guid: 996390109e1273245bd3adcc486b5965, type: 3}
+    initialSize: 5
+  - prefab: {fileID: 4977570815235510556, guid: 44905ac1d1c2e6c479001a35b0be3279, type: 3}
+    initialSize: 5
+  - prefab: {fileID: 2523134561153712916, guid: 1543440840167be45a169b100c28b84d, type: 3}
+    initialSize: 5
 --- !u!4 &1005330715
 Transform:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ public class SkillMovement : MonoBehaviour
     {
         transform.position += Vector3.left * speed * Time.deltaTime;
 
-        if (transform.position.x < -10f) Destroy(gameObject);
+        if (transform.position.x < -10f) ObjectPool.Instance.ReturnObject(gameObject);
+        //if (transform.position.x < -10f) Destroy(gameObject);
     }
 }
