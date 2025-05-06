@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3841365351144704311}
   - component: {fileID: 2294365711017939670}
   - component: {fileID: 1667457653985022036}
+  - component: {fileID: 522552477747032428}
   m_Layer: 0
   m_Name: Cactus
   m_TagString: Obstacle
@@ -205,3 +206,15 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &522552477747032428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7429682804436719149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b20f8fdac28005743a680a396013068c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

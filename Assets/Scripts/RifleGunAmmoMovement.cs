@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class RifleGunAmmoMovement : MonoBehaviour
 {
@@ -22,14 +24,36 @@ public class RifleGunAmmoMovement : MonoBehaviour
 
             if (parent != null && parent.name == "ObstacleGroup")
             {
-                Destroy(parent.gameObject);
+                List<Transform> children = new List<Transform>();
+
+                foreach (Transform child in parent)
+                {
+                    children.Add(child);
+                }
+
+                foreach (Transform child in children)
+                {
+                    child.SetParent(null);
+                    ObjectPool.Instance.ReturnObject(child.gameObject);
+                }
+
+                if (parent.childCount == 0)
+                {
+                    Destroy(parent.gameObject);
+                }
             }
             else
             {
-                Destroy(other.gameObject);
+                ObjectPool.Instance.ReturnObject(other.gameObject);
             }
 
             Destroy(gameObject);
         }
     }
+
+    //private IEnumerator DestroyAfterFrame(GameObject obj)
+    //{
+    //    yield return new WaitForEndOfFrame();
+    //    Destroy(obj);
+    //}
 }

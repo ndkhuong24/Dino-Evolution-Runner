@@ -22,7 +22,23 @@ public class ObstacleMover : MonoBehaviour
 
         if (transform.position.x < -10f)
         {
-            Destroy(gameObject);
+            Transform parent = transform.parent;
+
+            if (parent != null && parent.name == "ObstacleGroup")
+            {
+                transform.SetParent(null); 
+
+                ObjectPool.Instance.ReturnObject(gameObject);
+
+                if (parent.childCount == 0)
+                {
+                    Destroy(parent.gameObject);
+                }
+            }
+            else
+            {
+                ObjectPool.Instance.ReturnObject(gameObject); 
+            }
         }
     }
 }

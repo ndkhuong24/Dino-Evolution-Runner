@@ -51,15 +51,20 @@ public class ObstacleSpawner : MonoBehaviour
         for (int i = 0; i < spawnCount; i++)
         {
             int randomIndex = Random.Range(0, obstacles.Length);
+            GameObject prefab = obstacles[randomIndex];
 
-            if (obstacles[randomIndex] == null) continue;
+            if (prefab == null) continue;
 
             Vector3 spawnOffset = new Vector3(i * 1.5f, 0, 0);
+            Vector3 spawnPosition = spawnPoint.position + spawnOffset;
 
-            GameObject spawnedObstacle = Instantiate(obstacles[randomIndex], spawnPoint.position + spawnOffset, Quaternion.identity);
-
+            GameObject spawnedObstacle = ObjectPool.Instance.GetObject(prefab);
             if (spawnedObstacle != null)
             {
+                spawnedObstacle.transform.position = spawnPosition;
+                spawnedObstacle.transform.rotation = Quaternion.identity;
+                spawnedObstacle.transform.parent = null;
+
                 spawnedObstacles.Add(spawnedObstacle);
             }
         }

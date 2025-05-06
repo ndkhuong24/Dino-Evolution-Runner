@@ -230,4 +230,19 @@ public class KeyManager : MonoBehaviour
         skillCanvasGroup.alpha = 0f;
         skillIconImage.sprite = null;
     }
+
+    private void OnDisable()
+    {
+        ResetStealthState();
+    }
+
+    private void ResetStealthState()
+    {
+        isStealthActive = false;
+        waitingToReset = false;
+        stealthEffectApplied = false;
+        stealthTimer = 0f;
+        stealthTime.text = "";
+    }
+
 }
