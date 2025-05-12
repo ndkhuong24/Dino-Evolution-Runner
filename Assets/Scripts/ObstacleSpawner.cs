@@ -67,6 +67,12 @@ public class ObstacleSpawner : MonoBehaviour
 
                 spawnedObstacles.Add(spawnedObstacle);
             }
+
+            StealthSkillBehavior stealth = spawnedObstacle.GetComponent<StealthSkillBehavior>();
+            if (stealth != null)
+            {
+                stealth.ResetToDefault();
+            }
         }
 
         // Nếu có nhiều hơn 1 thì gộp vào nhóm

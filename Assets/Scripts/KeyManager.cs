@@ -12,9 +12,9 @@ public class KeyManager : MonoBehaviour
 
     [Header("AmmoSetting")]
     public TextMeshProUGUI ammoText;
+    public TextMeshProUGUI stealthTime;
     private int currentAmmo;
     private Skill assignedSkill = null;
-    public TextMeshProUGUI stealthTime;
 
     [Header("SkillSetting")]
     private RifleGunController rifleGunController;
@@ -37,10 +37,10 @@ public class KeyManager : MonoBehaviour
         skillIconImage = transform.Find("SkillIcon").GetComponent<Image>();
 
         player = GameObject.Find("Player");
-        if (player != null) playerCollider = player.GetComponent<Collider2D>();
 
         if (player != null)
         {
+            playerCollider = player.GetComponent<Collider2D>();
             rifleGunController = player.transform.Find("RifleGun")?.GetComponent<RifleGunController>();
             portalGunController = player.transform.Find("PortalGun")?.GetComponent<PortalGunController>();
         }
@@ -87,6 +87,7 @@ public class KeyManager : MonoBehaviour
     {
         assignedSkill = skill;
         currentAmmo = skill.skillCost;
+
         keyCanvasGroup.alpha = 1f;
         skillCanvasGroup.alpha = 1f;
         skillIconImage.sprite = skill.icon;
@@ -177,55 +178,87 @@ public class KeyManager : MonoBehaviour
 
     private void ApplyStealthEffect()
     {
-        foreach (var obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
+        foreach (var obstacle in GameObject.FindObjectsByType<StealthSkillBehavior>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
-            var sr = obstacle.GetComponent<SpriteRenderer>();
-            var col = obstacle.GetComponent<Collider2D>();
-
-            if (sr != null) sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.5f);
-            if (col != null) col.isTrigger = true;
-
-            if (obstacle.layer != LayerMask.NameToLayer("StealthObstacle"))
-            {
-                obstacle.layer = LayerMask.NameToLayer("StealthObstacle");
-            }
+            var behavior = obstacle.GetComponent<StealthSkillBehavior>();
+            if (behavior != null) behavior.Activate(player);
         }
     }
 
     private void ResetStealthEffect()
     {
-        foreach (var obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
+        foreach (var obstacle in GameObject.FindObjectsByType<StealthSkillBehavior>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
-            var sr = obstacle.GetComponent<SpriteRenderer>();
-            var col = obstacle.GetComponent<Collider2D>();
-
-            if (sr != null) sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
-            if (col != null) col.isTrigger = false;
-
-            if (obstacle.layer == LayerMask.NameToLayer("StealthObstacle"))
-            {
-                obstacle.layer = LayerMask.NameToLayer("Default");
-            }
+            var behavior = obstacle.GetComponent<StealthSkillBehavior>();
+            if (behavior != null) behavior.Deactivate(player);
         }
     }
+
+    //private void ApplyStealthEffect()
+    //{
+    //    foreach (var obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
+    //    {
+    //        var sr = obstacle.GetComponent<SpriteRenderer>();
+    //        var col = obstacle.GetComponent<Collider2D>();
+
+    //        if (sr != null) sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.5f);
+    //        if (col != null) col.isTrigger = true;
+
+    //        if (obstacle.layer != LayerMask.NameToLayer("StealthObstacle"))
+    //        {
+    //            obstacle.layer = LayerMask.NameToLayer("StealthObstacle");
+    //        }
+    //    }
+    //}
+
+    //private void ResetStealthEffect()
+    //{
+    //    foreach (var obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
+    //    {
+    //        var sr = obstacle.GetComponent<SpriteRenderer>();
+    //        var col = obstacle.GetComponent<Collider2D>();
+
+    //        if (sr != null) sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
+    //        if (col != null) col.isTrigger = false;
+
+    //        if (obstacle.layer == LayerMask.NameToLayer("StealthObstacle"))
+    //        {
+    //            obstacle.layer = LayerMask.NameToLayer("Default");
+    //        }
+    //    }
+    //}
 
     private void ResetSkill()
     {
         if (assignedSkill != null)
         {
-            if (assignedSkill.skillName == "PortalSkill")
+            switch (assignedSkill.skillName)
             {
-                portalGunController?.DeactivateWeapon();
-            }
-            else if (assignedSkill.skillName == "RifleSkill")
-            {
-                rifleGunController?.ResetShootAnimation();
-                rifleGunController?.DeactivateWeapon();
+                case "PortalSkill":
+                    portalGunController?.DeactivateWeapon();
+                    break;
+                case "RifleSkill":
+                    rifleGunController?.ResetShootAnimation();
+                    rifleGunController?.DeactivateWeapon();
+                    break;
             }
         }
+        //if (assignedSkill != null)
+        //{
+        //    if (assignedSkill.skillName == "PortalSkill")
+        //    {
+        //        portalGunController?.DeactivateWeapon();
+        //    }
+        //    else if (assignedSkill.skillName == "RifleSkill")
+        //    {
+        //        rifleGunController?.ResetShootAnimation();giờ
+        //        rifleGunController?.DeactivateWeapon();
+        //    }
+        //}
 
         assignedSkill = null;
         currentAmmo = 0;
+
         keyCanvasGroup.alpha = 0.3f;
         skillCanvasGroup.alpha = 0f;
         skillIconImage.sprite = null;
