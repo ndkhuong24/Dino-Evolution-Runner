@@ -67,7 +67,11 @@ public class DinoController : MonoBehaviour
         if (enable)
             rb.gravityScale = originalGravity;
         else
+        {
             rb.gravityScale = 0f;
+            rb.linearVelocity = Vector2.zero; // Reset vận tốc để không bị trôi
+        }
+
     }
 
     public void SetInPortal(bool state)
